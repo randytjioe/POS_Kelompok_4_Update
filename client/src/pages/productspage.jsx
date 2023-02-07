@@ -13,6 +13,7 @@ export default function PageProducts(){
     
     const [isLoading,setIsLoading] = useState(true)
     const [posts,setPosts] = useState([])
+    const [sort,setSort] = useState('ASC')
     const [categories1,setCategories1] =  useState([
         "GARMIN","CASIO","ALBA","TIMEX", "ALEXANDRE CHRISTIE", "FOSSIL"
       ])
@@ -30,6 +31,8 @@ export default function PageProducts(){
       gender.map((val,idx) => {
         url? url  += `&${val}=${val}` : url += `${val}=${val}`
         })
+
+      url += `&order=${sort}`
 
       console.log(url)
    
@@ -150,7 +153,7 @@ export default function PageProducts(){
 
             <Flex  flexDir={"row"} pos="fixed" top="70" left={"0"}>
             <Sidebar/>
-            <SidebarProduct  cat={[...categories1]} setCat={setCategories1} gen={[...gender]} setGen={setGender} filter={fetchFilPro} />
+            <SidebarProduct  cat={[...categories1]} setCat={setCategories1} gen={[...gender]} setGen={setGender} sort={[...sort]} setSort ={setSort} filter={fetchFilPro} />
             </Flex>
 
           

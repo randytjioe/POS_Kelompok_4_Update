@@ -63,15 +63,36 @@ app.get("/filter",(req,res)=>{
 
     console.log(req.query)
 
-    let where = " ("
-    req.query.men ? where += " gender = 'men' " : where +=    " gender != 'men' ";
-    req.query.women ? where += " or gender = 'women' " : where +=    "or gender != 'women' ";
+    let gender = [req.query?.men,req.query?.women,req.query?.unisex]
+    console.log(gender);
 
+    let where = " ("
+
+    gender = gender.filter((val)=> {
+        return val != undefined
+    })
+
+    gender.map((val,idx) => {
+        if(idx) {
+            if(val) {
+                where +=  `or gender = '${val}' ` 
+            }
+        }
+        else{
+            if(val) {
+                where +=  ` gender = '${val}' ` 
+            }
+        }
+    })
+    // req.query.men ? where += " gender = 'men' " : where +=    " gender != 'men'  ";
+    // req.query.women ? where += " or gender = 'women' " : where +=    "or gender != 'women'";
+    
     where += ") and ("
     delete req.query.men
     delete req.query.women
+    delete req.query.unisex
 
- 
+    
 
    const arrWhere = Object.entries(req.query)
 
@@ -90,7 +111,7 @@ app.get("/filter",(req,res)=>{
 
     let qString = "Select * from product_jamtangan ";
     if(where) {
-        qString = qString + " where " + where
+        qString = qString + " where " + where + " order by name " + req.query.order
     }
 
     console.log(qString);

@@ -1,7 +1,7 @@
 import { Flex, Image, InputGroup, InputRightElement,Box,List, Input, 
     Menu,Link, Button,Divider, Icon, MenuButton,MenuItem, MenuList,
      useDisclosure,Popover, PopoverTrigger, PopoverContent, PopoverArrow, 
-     PopoverCloseButton, PopoverHeader, PopoverBody, ListItem, Tooltip ,Center, Stack, Checkbox} from '@chakra-ui/react';
+     PopoverCloseButton, PopoverHeader, PopoverBody, ListItem, Tooltip ,Center, Stack, Checkbox, Select} from '@chakra-ui/react';
   
      import Logo from '../assets/logo.svg.png'
   import { AiOutlineSearch, AiOutlinePlus } from 'react-icons/ai';
@@ -43,6 +43,7 @@ import { Flex, Image, InputGroup, InputRightElement,Box,List, Input,
         })
          props.setCat([...newCat])
       }  }
+
        
       const CheckGender = (e,param) => {
         let newGen 
@@ -82,6 +83,11 @@ import { Flex, Image, InputGroup, InputRightElement,Box,List, Input,
       }}>
     WANITA
   </Checkbox>
+  <Checkbox colorScheme='cyan' defaultChecked onChange={(e)=> { 
+    CheckGender(e,"unisex")
+      }}>
+    UNISEX
+  </Checkbox>
  
 </Stack>
 
@@ -89,11 +95,11 @@ import { Flex, Image, InputGroup, InputRightElement,Box,List, Input,
             BRAND
           </Flex>
 
-          <InputGroup>
+          {/* <InputGroup>
         <InputRightElement pointerEvents="none" children={<AiOutlineSearch />}     />
             <Input backgroundColor={'white'} type="tel" placeholder="Search" w="200px" h="35px"/>
             
-          </InputGroup>
+          </InputGroup> */}
           <Stack px={5} spacing={2} direction='column' fontSize="10px">
   <Checkbox colorScheme='cyan' defaultChecked   onChange={(e)=> { 
     CheckCategories(e,"CASIO")
@@ -133,9 +139,19 @@ import { Flex, Image, InputGroup, InputRightElement,Box,List, Input,
   </Checkbox>
  
 </Stack>
+<Flex px={2} fontSize="18px">
+SORT
+          </Flex>
 
           <Flex flexDir={"column"}  alignItems={'center'} gap={2}>     
           
+          <Select variant="outline" onChange={(e)=> { 
+            props.setSort(e.target.value)
+      }  } >
+        <option value="ASC" selected >A - Z</option>
+          <option value="DESC">Z - A</option>
+          
+        </Select>
            
           <Flex w="200px" h="56px"  alignItems={'center'} bgColor="#1E2C3C" borderRadius={"2%"}
   onClick={props?.filter}

@@ -6,6 +6,7 @@ import PageCashier from "./pages/pagecashier";
 import PageAddProducts from "./pages/pageaddproduct";
 import ChartComponent from "./components/chart";
 import PageRegister from "./components/register_cashier"
+import PageEdit from "./pages/pageeditproduct"
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/add-product" element={<PageAddProducts />} />
         <Route path="/chart" element={<ChartComponent />} />
         <Route path="/register" element={<PageRegister />} />
+        <Route path="/edit-product" element={<PageEdit />} />
       </Routes>
     </>
   );
