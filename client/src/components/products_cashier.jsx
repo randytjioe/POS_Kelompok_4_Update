@@ -11,6 +11,11 @@ import React from 'react';
 export default function ProductPage(props) {
   const data = props.data;
 
+  const [orderList, setOrderList] = useState([]);
+
+    const handleAddToCart = (product) => {
+      setOrderList([...orderList, product]);}
+
     // const [products, setproducts] = useState([])
 
     // const [product,setproduct] = useState({
@@ -160,10 +165,10 @@ export default function ProductPage(props) {
 
                 return (
                     <>
-                    <Flex minW="166px" h="170px" bgColor={"#181918"}  py={2} borderRadius="5%" flexDir={"row"} justifyContent="center">
-    <Flex justifyContent="center" color="white">
+                    <Flex minW="166px" h="170px" bgColor={"#181918"}  py={2} borderRadius="5%" flexDir={"row"} justifyContent="center" >
+    <Flex justifyContent="center" color="white" >
 
-        <Link to={`/${product.link}`}>
+        
           
         <Image w="134px" h="153px" color={"white"}
         
@@ -173,7 +178,7 @@ export default function ProductPage(props) {
                         roundedTop="lg"
                       />
                       
-        </Link>
+       
    
               
     </Flex>
@@ -186,7 +191,7 @@ export default function ProductPage(props) {
                             lineHeight="tight"
                             isTruncated
                             color={"white"}
-                            textAlign="center">
+                            textAlign="center" onClick={() => handleAddToCart(product)}>
                               
                             {product?.category}
                           </Flex>

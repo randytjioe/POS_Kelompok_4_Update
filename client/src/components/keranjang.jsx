@@ -9,7 +9,7 @@ import { Flex, Image, InputGroup, InputRightElement,Box,List, Input,
   import { MdOutlineFavoriteBorder } from 'react-icons/md';
   import { HiOutlineShoppingBag } from 'react-icons/hi';
   import { Link as ReachLink } from "react-router-dom"
-  import { useRef } from 'react';
+  import { useRef, useState } from 'react';
   import {
     FiHome,
     FiTrendingUp,
@@ -26,13 +26,33 @@ import { Flex, Image, InputGroup, InputRightElement,Box,List, Input,
   
   
   export default function Keranjang() {
+    const [orderList,setOrderList] = useState([])
     return(
         <>
         <Flex  zIndex={40} gap={2}  justifyContent={"left"} 
       flexDir={"row"} pos="fixed" left="1050" top="75"  flexWrap="wrap" overflowX={"auto"} overflowY={"auto"}
      >
-        <Text>    Garmin Fenix 6S 010-02159-5F Smartwatch Stainless Steel Digital Dial Black Rubber  </Text>
-        <Text>    Garmin Fenix 6S 010-02159-5F Smartwatch Stainless Steel Digital Dial Black Rubber  </Text>
+<Flex bg="gray.200" flexDir={"column"}>
+          <Flex fontWeight="bold" >
+            Order List
+          </Flex>
+          <Flex>
+          <List spacing={3}>
+            {orderList.map((product) => (
+              <ListItem key={product.name}>{product.name} x 1</ListItem>
+            ))}
+          </List>
+          </Flex>
+          <Flex mt={5}>
+            <Text fontWeight="bold">
+              Total: Rp.
+              {orderList.reduce((total, product) => total + product.price, 0)}
+            </Text>
+          </Flex>
+          <Flex mt={5}>
+            <Button variantColor="green">Confirm</Button>
+          </Flex>
+        </Flex>
         </Flex>
         
         </>
