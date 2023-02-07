@@ -93,7 +93,7 @@ export default function Sidebar() {
           color: 'black',
         }} py={2}>
           <Icon as={BsFillArrowRightCircleFill} color="white" mx={6}/>
-        <Link to='/transaction' mx={1} as={ReachLink} fontWeight="bold" fontSize={16} color="white" > ADD</Link>
+        <Link to='/add-product' mx={1} as={ReachLink} fontWeight="bold" fontSize={16} color="white" > ADD</Link>
         </Flex>
         <Divider orientation="horizontal" />
         <Flex w="207px" h="56px"  alignItems={'center'}
