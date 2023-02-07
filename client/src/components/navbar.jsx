@@ -85,18 +85,15 @@ _hover: {
 <PopoverHeader bgColor={"#7D7D7D"} fontFamily="Bebas" color="white"> SELAMAT DATANG!</PopoverHeader>
 <PopoverBody>
 <List fontSize={"14px"} fontFamily="Bebas"  color="#7D7D7D" gap={2}>
-<ListItem ><Link to='/login'  as={ReachLink}  >Masuk</Link> </ListItem>
+
 <ListItem ><Link to='/register'  as={ReachLink}  >Buat Akun</Link> </ListItem>
-<ListItem ><Box onClick={onOpen}>
-        Lihat Status Pesanan
-        </Box>
-         </ListItem>
-        <ListItem > Konfirmasi Transfer</ListItem>
-        <ListItem > Bantuan</ListItem>
+<Divider orientation="horizontal" py={2}/>
+        <ListItem > Profile</ListItem>
+        
         
         <Divider orientation="horizontal" py={2}/>
+        <ListItem > Logout</ListItem>
         
-        <ListItem >Community Influencer Program</ListItem>
 </List> 
 </PopoverBody>
 </PopoverContent>
