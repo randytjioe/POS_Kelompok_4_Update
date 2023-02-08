@@ -7,12 +7,13 @@ import PageAddProducts from "./pages/pageaddproduct";
 import ChartComponent from "./components/chart";
 import PageRegister from "./components/register_cashier"
 import PageEdit from "./pages/pageeditproduct"
+import PageTransaction from "./pages/pagetransaction";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/dashboard" element={<PageAdmin />} />
+        <Route path="/" element={<PageAdmin />} />
         <Route path="/login" element={<PageLogin />} />
         <Route path="/products" element={<PageProduct />} />
         <Route path="/cashier" element={<PageCashier />} />
@@ -20,6 +21,7 @@ function App() {
         <Route path="/chart" element={<ChartComponent />} />
         <Route path="/register" element={<PageRegister />} />
         <Route path="/edit-product" element={<PageEdit />} />
+        <Route path="/transaction" element={<PageTransaction />} />
       </Routes>
     </>
   );

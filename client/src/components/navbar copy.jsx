@@ -4,7 +4,6 @@ import { Flex, Image, InputGroup, InputRightElement,Box,List, Input,
      PopoverCloseButton, PopoverHeader, PopoverBody, ListItem, Avatar , Center} from '@chakra-ui/react';
   
      import Avatar1 from '../assets/avatar.png'
-     import Logo from '../assets/logo.png'
   import { AiOutlineSearch, AiOutlinePlus } from 'react-icons/ai';
   import { RiAccountCircleFill } from 'react-icons/ri';
   import { MdOutlineFavoriteBorder } from 'react-icons/md';
@@ -23,43 +22,16 @@ import { Flex, Image, InputGroup, InputRightElement,Box,List, Input,
     FiBox,
     FiWatch,
   } from 'react-icons/fi';
-  import { useEffect, useState } from "react"
-  export default function Navbar(props) {
-    const data = props.data;
-  
+
+  export default function Navbar() {
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [search, setSearch] = useState("")
+    
     const initialRef = useRef(null)
     const finalRef = useRef(null)
-    const [products, setProducts] = useState([])
-    const [product , setProduct] = useState([]
-    
-    )
-    function inputHandler(event) {
-   
-      const { value, name } = event.target;
-  
-    
-       name === "search" ? 
-       setSearch(value) 
-       :
- 
-      setProduct({
-        ...product,
-        [name]: value,
-      })
-    }
-
-    // useEffect(
-    //   ()=>{
-    //     console.log(search)
-    //   }, [search]
-    // )
-    
       return (
         <>
-        <Flex zIndex={50} px={2} h={'70px'} fontFamily={"Tw Cen MT"}
-     backgroundColor="white" justifyContent="center" 
+        <Flex zIndex={50} px={2} h={'70px'}
+     backgroundColor="black" justifyContent="center" 
       alignItems={'center'} w="full" pos="sticky" top="0" padding="20px" display={"flex"} borderBottom={"2px solid #E2E8F0"}>
          
          <Flex px={3} gap={5}>
@@ -70,22 +42,15 @@ import { Flex, Image, InputGroup, InputRightElement,Box,List, Input,
 {/* <MenuButton> */}
 
 <Flex alignItems={"center"} >
-    <Image fontSize={"26px"} color="#F68522" justifyContent="center" src={Logo}>
-       
-    </Image>
+    <Flex fontSize={"26px"} color="#F68522" justifyContent="center" >
+        TOKO JAM TANGAN BATAM
+    </Flex>
     <Flex px={9} alignItems="center">
 <InputGroup>
-        
-            <Input  onKeyDown={(e)=>
-             e.key==="Enter" ? props?.filter(e.target.value):null
-            } backgroundColor={'white'} type="tel" placeholder="Search" w="470px" h="35px" borderRadius={"none"} onChange={inputHandler} name="search"  ></Input>
-            <Flex justifyContent="center" textAlign="center" h="35px" w="35px" onClick={()=> props?.filter(search)}
-            _hover={{
-            bg: 'grey',
-            color: 'black',
-            cursor:"pointer" }}  borderRadius="100%" bgColor={"#F68522"}> <Center><Icon as={AiOutlineSearch} justifyContent="center" ></Icon></Center> </Flex> 
+        <InputRightElement pointerEvents="none" children={<AiOutlineSearch />}     />
+            <Input backgroundColor={'white'} type="tel" placeholder="Search" w="470px" h="35px"/>
+            
           </InputGroup>
-
           </Flex>
 
 <Icon  boxSize={"7"} as={FiBell} color="white" sx={{
@@ -108,16 +73,16 @@ _hover: {
           }}/>
           </Center>
           <Flex flexDir={"column"} px="10px" justifyContent={"center"}>
-          <Flex fontSize={"16px"} color="#F68522" >Muhammad Iqbal Fazlur Rahman</Flex>
-          <Flex fontSize={"12px"} color="#F68522">ADMIN</Flex>
+          <Flex fontSize={"16px"} color="white" >Muhammad iqbal fazlur rahman</Flex>
+          <Flex fontSize={"12px"} color="white">Admin</Flex>
           </Flex>
 </Flex> 
 </PopoverTrigger >
 <PopoverContent >
-<PopoverArrow backgroundColor={"#F68522"}/>
+<PopoverArrow backgroundColor={"#7D7D7D"}/>
 {/* <PopoverCloseButton /> */}
 
-<PopoverHeader bgColor={"#F68522"} fontFamily="Bebas" color="white"> SELAMAT DATANG!</PopoverHeader>
+<PopoverHeader bgColor={"#7D7D7D"} fontFamily="Bebas" color="white"> SELAMAT DATANG!</PopoverHeader>
 <PopoverBody>
 <List fontSize={"14px"} fontFamily="Bebas"  color="#7D7D7D" gap={2}>
 
@@ -127,7 +92,7 @@ _hover: {
         
         
         <Divider orientation="horizontal" py={2}/>
-        <ListItem ><Link to='/login' as={ReachLink}>Logout </Link> </ListItem>
+        <ListItem > Logout</ListItem>
         
 </List> 
 </PopoverBody>

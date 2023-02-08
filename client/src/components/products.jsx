@@ -137,7 +137,7 @@ export default function ProductPage(props) {
     return (
         <>
       <Flex zIndex={40} w="1200px"   gap={2} paddingTop="70" paddingBottom={"20px"} justifyContent="start"
-      paddingX={"20px"}
+      paddingX={"20px"} fontFamily={"Tw Cen MT"}
       flexDir={"row"}   flexWrap="wrap" overflowX={"auto"} overflowY={"auto"}
      h="full">
       {/* <Flex > */}
@@ -214,7 +214,7 @@ export default function ProductPage(props) {
                             Rp.{product?.price_promo.toLocaleString()}
                           </Flex>
                           <Flex
-                            fontSize="14px"
+                            fontSize="11px"
                             color={"white"}
                             textAlign="center"
                             as="h4"
@@ -224,6 +224,16 @@ export default function ProductPage(props) {
                                 <Text as='s' display={!product?.price ? "none" : "" }>
                             Rp. {product?.price.toLocaleString()}
                             </Text>
+                          </Flex>
+                          <Flex
+                            fontSize="12px"
+                            fontWeight="semibold"
+                            as="h4"
+                            lineHeight="tight"
+                            isTruncated
+                            color={"white"}
+                            textAlign="center">
+                             STOCK : {product?.stock}
                           </Flex>
                           
                         </Flex>

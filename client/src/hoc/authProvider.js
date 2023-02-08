@@ -4,7 +4,7 @@ import { axiosInstance, AxiosInstance } from "../config/config"
 import { useEffect, useState } from "react"
 import Loading from "../components/loading"
 
-const authProvider  = ({childre}) => {
+const AuthProvider  = ({children}) => {
     const dispatch = useDispatch()
     const [isLoading,setIsLoading] = useState(true)
 
@@ -38,4 +38,4 @@ const authProvider  = ({childre}) => {
     return isLoading? <Loading/> : children
 
 }
-export default authProvider;
+export default AuthProvider;

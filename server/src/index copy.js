@@ -28,8 +28,6 @@ db.connect((err)=>{
     }
 })
 
-
-
 app.get("/product-men",(req,res)=>{
     const qString = "Select * from product_jamtangan where gender = men";
     db.query(qString,(err,result)=>{
@@ -132,28 +130,6 @@ app.get("/filter",(req,res)=>{
     })
 })
 
-app.get("/find",(req,res)=>{
-    console.log(req.query);
-    let qString = "Select * from product_jamtangan ";
-
-    qString = qString + " where name LIKE '%" + req.query.name +"%' "
-    
-
-    console.log(qString);
-    db.query(qString,(err,result)=>{
-        if (err){
-            res.status(400).json({
-                message:"query error",
-            });
-        }
-
-        console.log(res.data);
-        res.status(200).json({
-            message:"data fetched",
-            result:result,
-        })
-    })
-})
 
 
 app.listen(2000,()=>{

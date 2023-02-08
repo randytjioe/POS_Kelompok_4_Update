@@ -1,7 +1,7 @@
 import { Flex, Image, InputGroup, InputRightElement,Box,List, Input, 
     Menu,Link, Button,Divider, Icon, MenuButton,MenuItem, MenuList,
      useDisclosure,Popover, PopoverTrigger, PopoverContent, PopoverArrow, 
-     PopoverCloseButton, PopoverHeader, PopoverBody, ListItem, Tooltip ,Center, Stack, Checkbox, Select} from '@chakra-ui/react';
+     PopoverCloseButton, PopoverHeader, PopoverBody, ListItem, Tooltip ,Center, Stack, Checkbox, Select,Accordion, AccordionButton, AccordionItem, AccordionIcon, AccordionPanel} from '@chakra-ui/react';
   
      import Logo from '../assets/logo.svg.png'
   import { AiOutlineSearch, AiOutlinePlus } from 'react-icons/ai';
@@ -62,87 +62,121 @@ import { Flex, Image, InputGroup, InputRightElement,Box,List, Input,
       return (
         <>
       <Flex zIndex={90} px={2} w={'215px'}
-       backgroundColor="white" justifyContent="center" 
-       h={"100vh"}
-      left="209"  padding="20px" display={"flex"}  borderRight={"2px solid #E2E8F0"}>
-      <Flex  gap={3} flexDir={"column"}  >
-      <Flex   justifyContent="center" alignItems={"center"} fontSize="24px">
+       backgroundColor="white" justifyContent="center" fontFamily={"Tw Cen MT"}
+       minH={"100vh"}
+      left="209"  padding="5px" display={"flex"}  borderRight={"2px solid #E2E8F0"} >
+      <Flex   flexDir={"column"} paddingBottom={"5px"}>
+      <Flex   justifyContent="center" alignItems={"center"} fontSize="20px" fontWeight="bold" >
         DAFTAR KATEGORI
           </Flex>
-          <Flex px={2} fontSize="18px">
+          <Accordion defaultIndex={[0]} allowMultiple>
+  <AccordionItem>
+    <h2>
+      <AccordionButton  >
+        <Box as="span" flex='1' textAlign='left'>
+          <Flex px={2} fontSize="18px" color={"#F68522"} fontWeight="bold">
             GENDER
           </Flex>
+          </Box>
+        <AccordionIcon />
+      </AccordionButton>
+    </h2>
+    <AccordionPanel pb={4}>
           <Stack px={5} spacing={2} direction='column' fontSize="12px">
-  <Checkbox colorScheme='cyan' defaultChecked onChange={(e)=> { 
+  <Checkbox colorScheme='orange'  onChange={(e)=> { 
     CheckGender(e,"men")
       }}>
     PRIA
   </Checkbox>
-  <Checkbox colorScheme='cyan' defaultChecked onChange={(e)=> { 
+  <Checkbox colorScheme='orange'  onChange={(e)=> { 
     CheckGender(e,"women")
       }}>
     WANITA
   </Checkbox>
-  <Checkbox colorScheme='cyan' defaultChecked onChange={(e)=> { 
+  <Checkbox colorScheme='orange'  onChange={(e)=> { 
     CheckGender(e,"unisex")
       }}>
     UNISEX
   </Checkbox>
  
 </Stack>
-
-<Flex px={2} fontSize="18px">
+</AccordionPanel>
+  </AccordionItem>
+  </Accordion>
+<Accordion defaultIndex={[0]} allowMultiple >
+  <AccordionItem>
+    <h2>
+      <AccordionButton>
+        <Box as="span" flex='1' textAlign='left'>
+<Flex px={2} fontSize="18px" color={"#F68522"} fontWeight="bold">
             BRAND
           </Flex>
-
+          </Box>
           {/* <InputGroup>
         <InputRightElement pointerEvents="none" children={<AiOutlineSearch />}     />
             <Input backgroundColor={'white'} type="tel" placeholder="Search" w="200px" h="35px"/>
             
           </InputGroup> */}
+           <AccordionIcon />
+      </AccordionButton>
+    </h2>
+    <AccordionPanel pb={4}>
           <Stack px={5} spacing={2} direction='column' fontSize="10px">
-  <Checkbox colorScheme='cyan' defaultChecked   onChange={(e)=> { 
+  <Checkbox colorScheme='orange'    onChange={(e)=> { 
     CheckCategories(e,"CASIO")
       }  }>
     CASIO
   </Checkbox>
-  <Checkbox colorScheme='cyan' defaultChecked 
+  <Checkbox colorScheme='orange'  
   onChange={(e)=> { 
     CheckCategories(e,"SEIKO")
       }}>
     SEIKO
   </Checkbox>
-  <Checkbox colorScheme='cyan' defaultChecked onChange={(e)=> { 
+  <Checkbox colorScheme='orange'  onChange={(e)=> { 
     CheckCategories(e,"TIMEX")
       }  }>
     TIMEX
   </Checkbox>
-  <Checkbox colorScheme='cyan' defaultChecked  onChange={(e)=> { 
+  <Checkbox colorScheme='orange'   onChange={(e)=> { 
     CheckCategories(e,"ALEXANDRE CHRISTIE")
       }  }>
     ALEXANDRE CHRISTIE
   </Checkbox>
-  <Checkbox colorScheme='cyan' defaultChecked onChange={(e)=> { 
+  <Checkbox colorScheme='orange'  onChange={(e)=> { 
     CheckCategories(e,"FOSSIL")
       }  }>
     FOSSIL
   </Checkbox>
-  <Checkbox colorScheme='cyan' defaultChecked  onChange={(e)=> { 
+  <Checkbox colorScheme='orange'   onChange={(e)=> { 
     CheckCategories(e,"GARMIN")
       }  }>
     GARMIN
   </Checkbox>
-  <Checkbox colorScheme='cyan' defaultChecked  onChange={(e)=> { 
+  <Checkbox colorScheme='orange'   onChange={(e)=> { 
     CheckCategories(e,"ALBA")
       }  }>
     ALBA
   </Checkbox>
  
 </Stack>
-<Flex px={2} fontSize="18px">
+</AccordionPanel>
+  </AccordionItem>
+</Accordion>
+
+<Accordion defaultIndex={[0]} allowToggle  >
+  <AccordionItem>
+    <h2>
+      <AccordionButton>
+        <Box as="span" flex='1' textAlign='left'>
+<Flex px={2} fontSize="18px" color={"#F68522"} fontWeight="bold">
 SORT
           </Flex>
-
+          </Box>
+        <AccordionIcon />
+      </AccordionButton>
+    </h2>
+    <AccordionPanel pb={4}>
           <Flex flexDir={"column"}  alignItems={'center'} gap={2}>     
           
           <Select variant="outline" onChange={(e)=> { 
@@ -152,16 +186,20 @@ SORT
           <option value="DESC">Z - A</option>
           
         </Select>
+        </Flex>
+        </AccordionPanel>
+  </AccordionItem>
+  </Accordion>
            
-          <Flex w="200px" h="56px"  alignItems={'center'} bgColor="#1E2C3C" borderRadius={"2%"}
+          <Flex w="200px" h="56px"  alignItems={'center'}  borderRadius={"2%"}
   onClick={props?.filter}
           _hover={{
-            bg: 'grey',
+            bg: 'orange',
             color: 'black',
             cursor:"pointer"
           }} py={2}>
-            <Icon as={AiOutlineSearch} color="white" mx={2}/>
-            <Box as="b" mx={3}   fontSize={18} color="white"  > FILTER</Box>
+            <Icon as={AiOutlineSearch} color="black" mx={2}/>
+            <Box as="b" mx={3}   fontSize={18} color="black" textAlign={"center"} > FILTER</Box>
             </Flex>
 
              
@@ -194,7 +232,6 @@ SORT
             </Flex> */}
             
            
-            </Flex>
             </Flex>
           </Flex>
       </>

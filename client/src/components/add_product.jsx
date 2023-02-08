@@ -1,3 +1,4 @@
+import React from "react";
 import noImage from "../assets/no-image.png";
 import {
   Button,
@@ -7,16 +8,23 @@ import {
   Heading,
   Input,
   Stack,
+  Select,
   useColorModeValue,
   HStack,
   Avatar,
   AvatarBadge,
   IconButton,
   Center,
+  InputGroup,
+  InputLeftElement,
+  Radio,
+  RadioGroup,
+
 } from "@chakra-ui/react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
 
 export default function UserProfileEdit() {
+  const [value, setValue] = React.useState('1')
   return (
     <Flex
       minH={"90vh"}
@@ -39,7 +47,7 @@ export default function UserProfileEdit() {
           lineHeight={1.1}
           fontSize={{ base: "2xl", sm: "3xl" }}
         >
-          Add Product
+          ADD PRODUCT
         </Heading>
         <FormControl id="productName">
           <FormLabel>Product Image</FormLabel>
@@ -58,19 +66,23 @@ export default function UserProfileEdit() {
               </Avatar>
             </Center>
             <Center w="full">
-            Add ImageURL 
-              <Input w="full"></Input>
+              <Input w="full" placeholder="Image URL"></Input>
             </Center>
           </Stack>
         </FormControl>
         <FormControl id="Brand">
           <FormLabel>Brand</FormLabel>
-          <Input
+          <Select variant="outline">
+            <option value="option1">GARMIN</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+          </Select>
+          {/* <Input
             placeholder="brand"
             _placeholder={{ color: "gray.500" }}
             type="text"
-          />
-          </FormControl>
+          /> */}
+        </FormControl>
         <FormControl id="productName">
           <FormLabel>Product Name</FormLabel>
           <Input
@@ -79,30 +91,49 @@ export default function UserProfileEdit() {
             type="text"
           />
         </FormControl>
-
-                 <FormControl id="category">
-          <FormLabel>Harga Promo</FormLabel>
-          <Input
+        <FormControl id="promo price">
+          <FormLabel>Original Price</FormLabel>
+          <InputGroup>
+            <InputLeftElement
+              pointerEvents="none"
+              color="gray.300"
+              fontSize="1.2em"
+              children="Rp"
+            />
+            <Input placeholder="Enter amount" />
+          </InputGroup>
+          {/* <Input
             placeholder="your-email@example.com"
             _placeholder={{ color: "gray.500" }}
             type="email"
-          />
-           </FormControl>
-                 <FormControl id="category">
-          <FormLabel>Harga Asli</FormLabel>
-          <Input
-            placeholder="your-email@example.com"
-            _placeholder={{ color: "gray.500" }}
-            type="email"
-          />
+          /> */}
+        </FormControl>
+        <FormControl id="price">
+          <FormLabel>Promo Price</FormLabel>
+          <InputGroup>
+            <InputLeftElement
+              pointerEvents="none"
+              color="gray.300"
+              fontSize="1.2em"
+              children="Rp"
+            />
+            <Input placeholder="Enter amount" />
+          </InputGroup>
         </FormControl>
         <FormControl id="password">
           <FormLabel>Gender</FormLabel>
-          <Input
+          <RadioGroup onChange={setValue} value={value}>
+            <Stack direction="row" spacing={10}>
+              <Radio value="1">Men</Radio>
+              <Radio value="2">Women</Radio>
+              <Radio value="3">Unisex</Radio>
+            </Stack>
+          </RadioGroup>
+          {/* <Input
             placeholder="password"
             _placeholder={{ color: "gray.500" }}
             type="password"
-          />
+          /> */}
         </FormControl>
         <Stack spacing={6} direction={["column", "row"]}>
           <Button
@@ -123,10 +154,10 @@ export default function UserProfileEdit() {
               bg: "blue.500",
             }}
           >
-            Submit
+            Add
           </Button>
         </Stack>
       </Stack>
     </Flex>
   );
-}
+} 

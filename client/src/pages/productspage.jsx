@@ -15,10 +15,10 @@ export default function PageProducts(){
     const [posts,setPosts] = useState([])
     const [sort,setSort] = useState('ASC')
     const [categories1,setCategories1] =  useState([
-        "GARMIN","CASIO","ALBA","TIMEX", "ALEXANDRE CHRISTIE", "FOSSIL"
+        
       ])
 
-      const [gender,setGender] = useState(["men","women"])
+      const [gender,setGender] = useState([])
     
 
 
@@ -37,6 +37,22 @@ export default function PageProducts(){
       console.log(url)
    
       await axiosInstance.get("/filter?"+url).then((res)=>{
+
+        setData(res.data.result)
+      })
+
+    
+    }
+
+    const fetchFinPro = async (search) => {
+      let url = ""
+      
+
+      url += `name=${search}`
+
+      console.log(url)
+   
+      await axiosInstance.get("/find?"+url).then((res)=>{
 
         setData(res.data.result)
       })
@@ -149,7 +165,7 @@ export default function PageProducts(){
         :
         (
             <>
-            <Navbar/>
+            <Navbar filter={fetchFinPro}/>
 
             <Flex  flexDir={"row"} pos="fixed" top="70" left={"0"}>
             <Sidebar/>
