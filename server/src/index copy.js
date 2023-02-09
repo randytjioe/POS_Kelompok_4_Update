@@ -1,137 +1,124 @@
-
 const express = require("express");
-const app=express();
+const app = express();
 app.use(express.json());
 const mysql = require("mysql2");
-const cors=require('cors');
-app.use(cors())
+const cors = require("cors");
+app.use(cors());
 const options = {
-    origin: 'http://localhost:3000',
-    }
-    app.use(cors(options))
+  origin: "http://localhost:3000",
+};
+app.use(cors(options));
 
+const db = mysql.createConnection({
+  host: "localhost",
+  port: 3306,
+  user: "root",
 
-const db=mysql.createConnection({
-    host :"localhost",
-    port:3306,
-    user:"root",
-
-    password :"password",
-    database:"project_pos",
+  password: "password",
+  database: "project_pos",
 });
 
-db.connect((err)=>{
-    if (err){
-        console.log(err);
+db.connect((err) => {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("db connected");
+  }
+});
+
+app.get("/product-men", (req, res) => {
+  const qString = "Select * from product_jamtangan where gender = men";
+  db.query(qString, (err, result) => {
+    if (err) {
+      res.status(400).json({
+        message: "query error",
+      });
+    }
+    res.status(200).json({
+      message: "data fetched",
+      result: result,
+    });
+  });
+});
+
+app.get("/product-all", (req, res) => {
+  const qString = "Select * from product_jamtangan";
+  db.query(qString, (err, result) => {
+    if (err) {
+      res.status(400).json({
+        message: "query error",
+      });
+    }
+    res.status(200).json({
+      message: "data fetched",
+      result: result,
+    });
+  });
+});
+
+app.get("/filter", (req, res) => {
+  console.log(req.query);
+
+  let gender = [req.query?.men, req.query?.women, req.query?.unisex];
+  console.log(gender);
+
+  let where = " (";
+
+  gender = gender.filter((val) => {
+    return val != undefined;
+  });
+
+  gender.map((val, idx) => {
+    if (idx) {
+      if (val) {
+        where += `or gender = '${val}' `;
+      }
     } else {
-        console.log("db connected");
+      if (val) {
+        where += ` gender = '${val}' `;
+      }
     }
-})
+  });
+  // req.query.men ? where += " gender = 'men' " : where +=    " gender != 'men'  ";
+  // req.query.women ? where += " or gender = 'women' " : where +=    "or gender != 'women'";
 
-app.get("/product-men",(req,res)=>{
-    const qString = "Select * from product_jamtangan where gender = men";
-    db.query(qString,(err,result)=>{
-        if (err){
-            res.status(400).json({
-                message:"query error",
-            });
-        }
-        res.status(200).json({
-            message:"data fetched",
-            result:result,
-        })
-    })
-})
+  where += ") and (";
+  delete req.query.men;
+  delete req.query.women;
+  delete req.query.unisex;
 
-app.get("/product-all",(req,res)=>{
-    const qString = "Select * from product_jamtangan";
-    db.query(qString,(err,result)=>{
-        if (err){
-            res.status(400).json({
-                message:"query error",
-            });
-        }
-        res.status(200).json({
-            message:"data fetched",
-            result:result,
-        })
-    })
-})
+  const arrWhere = Object.entries(req.query);
 
+  console.log(arrWhere);
+  arrWhere.map((val, idx) => {
+    idx
+      ? (where += `or category = '${val[0]}' `)
+      : (where += ` category = '${val[0]}' `);
+  });
 
-app.get("/filter",(req,res)=>{
+  where += ")";
 
-    console.log(req.query)
+  let qString = "Select * from product_jamtangan ";
+  if (where) {
+    qString = qString + " where " + where + " order by name " + req.query.order;
+  }
 
-    let gender = [req.query?.men,req.query?.women,req.query?.unisex]
-    console.log(gender);
-
-    let where = " ("
-
-    gender = gender.filter((val)=> {
-        return val != undefined
-    })
-
-    gender.map((val,idx) => {
-        if(idx) {
-            if(val) {
-                where +=  `or gender = '${val}' ` 
-            }
-        }
-        else{
-            if(val) {
-                where +=  ` gender = '${val}' ` 
-            }
-        }
-    })
-    // req.query.men ? where += " gender = 'men' " : where +=    " gender != 'men'  ";
-    // req.query.women ? where += " or gender = 'women' " : where +=    "or gender != 'women'";
-    
-    where += ") and ("
-    delete req.query.men
-    delete req.query.women
-    delete req.query.unisex
-
-    
-
-   const arrWhere = Object.entries(req.query)
-
-    console.log(arrWhere);
-    arrWhere.map((val,idx)=>{
-        idx?
-             where += `or category = '${val[0]}' `
-             :
-             where += ` category = '${val[0]}' `
-
-    })
-
-    where += ")"
-
-
-
-    let qString = "Select * from product_jamtangan ";
-    if(where) {
-        qString = qString + " where " + where + " order by name " + req.query.order
+  console.log(qString);
+  db.query(qString, (err, result) => {
+    if (err) {
+      res.status(400).json({
+        message: "query error",
+      });
     }
 
-    console.log(qString);
-    db.query(qString,(err,result)=>{
-        if (err){
-            res.status(400).json({
-                message:"query error",
-            });
-        }
+    console.log(res.data);
+    res.status(200).json({
+      message: "data fetched",
+      result: result,
+    });
+  });
+});
 
-        console.log(res.data);
-        res.status(200).json({
-            message:"data fetched",
-            result:result,
-        })
-    })
-})
-
-
-
-app.listen(2000,()=>{
-    console.log("api is running");
-})
+app.listen(2000, () => {
+  console.log("api is running");
+});
