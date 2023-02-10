@@ -43,7 +43,7 @@ app.get("/product-men", (req, res) => {
 
 app.get("/transaction", (req, res) => {
   const qString =
-    "Select n.no_transaction from product_jamtangan p join (Select * from transaction_item i join transaction_header h on i.id_transaction_header = h.id_transaction_header) n on n.id_product=p.id order by no_transaction asc";
+    "Select n.id_transaction_item, n.qty,n.total_harga_transaction,n.id_product,n.id_transaction_header,n.no_transaction,n.tgl_trans,n.total_harga,n.user_id,p.imageURL,p.category,p.name,p.price_promo,p.price,p.gender,p.stock from product_jamtangan p join (Select i.id_transaction_item, i.qty,i.total_harga_transaction,i.id_product,i.id_transaction_header,h.no_transaction,h.tgl_trans,h.total_harga,h.user_id from transaction_item i join transaction_header h on i.id_transaction_header = h.id_transaction_header) n on n.id_product=p.id_product order by no_transaction asc";
 
   db.query(qString, (err, result) => {
     if (err) {
@@ -72,7 +72,21 @@ app.get("/product-all", (req, res) => {
     });
   });
 });
-
+app.get("/category", (req, res) => {
+  const qString =
+    "select distinct category from product_jamtangan order by category asc";
+  db.query(qString, (err, result) => {
+    if (err) {
+      res.status(400).json({
+        message: "query error",
+      });
+    }
+    res.status(200).json({
+      message: "data fetched",
+      result: result,
+    });
+  });
+});
 app.get("/filter", (req, res) => {
   console.log(req.query);
   const { order } = req.query;

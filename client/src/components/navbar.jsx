@@ -142,7 +142,7 @@ export default function Navbar(props) {
             <Icon
               boxSize={"7"}
               as={FiBell}
-              color="white"
+              color="black"
               sx={{
                 _hover: {
                   cursor: "pointer",
