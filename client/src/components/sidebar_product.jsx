@@ -195,10 +195,10 @@ export default function Sidebar(props) {
                         <Checkbox
                           colorScheme="orange"
                           onChange={(e) => {
-                            CheckCategories(e, `${product?.category}`);
+                            CheckCategories(e, `${product?.name}`);
                           }}
                         >
-                          {product?.category}
+                          {product?.name}
                         </Checkbox>
                       </>
                     );

@@ -235,7 +235,7 @@ export default function ProductPage(props) {
                         w="134px"
                         h="153px"
                         color={"white"}
-                        src={product?.imageURL}
+                        src={product?.image_url}
                         alt={`Picture of ${product?.name}`}
                         roundedTop="lg"
                       />
@@ -283,9 +283,9 @@ export default function ProductPage(props) {
                       lineHeight="tight"
                       isTruncated
                     >
-                      Rp.{product?.price_promo.toLocaleString()}
+                      Rp.{product?.harga.toLocaleString()}
                     </Flex>
-                    <Flex
+                    {/* <Flex
                       fontSize="11px"
                       color={"white"}
                       textAlign="center"
@@ -296,7 +296,7 @@ export default function ProductPage(props) {
                       <Text as="s" display={!product?.price ? "none" : ""}>
                         Rp. {product?.price.toLocaleString()}
                       </Text>
-                    </Flex>
+                    </Flex> */}
                     <Flex
                       fontSize="12px"
                       fontWeight="semibold"

@@ -36,8 +36,8 @@ export default function Cashier(props) {
 
     const orderItem = {
       qty,
-      total_harga_transaction: qty * product.price_promo,
-      price: product.price_promo,
+      total_harga_transaction: qty * product.harga,
+      price: product.harga,
 
       product,
     };
@@ -163,7 +163,7 @@ function OrderList(props) {
                   w="104px"
                   h="123px"
                   color={"white"}
-                  src={props.data.product?.imageURL}
+                  src={props.data.product?.image_url}
                   alt={`Picture of ${props.data.product?.name}`}
                   roundedTop="lg"
                 />
@@ -187,15 +187,15 @@ function OrderList(props) {
                   {props.data.product?.name}
                 </Flex>
                 <Flex
-                  fontSize="14px"
+                  fontSize="12px"
                   color={"#F68522"}
                   textAlign="center"
                   as="h4"
                   lineHeight="tight"
-                  isTruncated
                 >
-                  Rp. {props.data.product?.price_promo.toLocaleString()} x{" "}
-                  {props?.data.qty} = Rp. {props.data.total_harga_transaction}
+                  Rp. {props.data.product?.harga.toLocaleString()} x{" "}
+                  {props?.data.qty} = Rp.{" "}
+                  {props.data.total_harga_transaction.toLocaleString()}
                 </Flex>
               </Flex>
             </Flex>
@@ -235,7 +235,7 @@ function Product(props) {
           w="134px"
           h="153px"
           color={"white"}
-          src={props.product?.imageURL}
+          src={props.product?.image_url}
           roundedTop="lg"
         />
       </Flex>
@@ -259,7 +259,7 @@ function Product(props) {
           {props.product?.name}
         </Flex>
         <Flex fontSize="14px" color="#F68522">
-          Rp. {props.product?.price_promo.toLocaleString()}
+          Rp. {props.product?.harga.toLocaleString()}
         </Flex>
         <Flex fontSize="12px" color="white">
           Stock : {props.product?.stock}

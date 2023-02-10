@@ -27,7 +27,7 @@ db.connect((err) => {
 });
 
 app.get("/product-men", (req, res) => {
-  const qString = "Select * from product_jamtangan where gender = men";
+  const qString = "Select * from products where gender = 1";
   db.query(qString, (err, result) => {
     if (err) {
       res.status(400).json({
@@ -43,7 +43,15 @@ app.get("/product-men", (req, res) => {
 
 app.get("/transaction", (req, res) => {
   const qString =
-    "Select n.id_transaction_item, n.qty,n.total_harga_transaction,n.id_product,n.id_transaction_header,n.no_transaction,n.tgl_trans,n.total_harga,n.user_id,p.imageURL,p.category,p.name,p.price_promo,p.price,p.gender,p.stock from product_jamtangan p join (Select i.id_transaction_item, i.qty,i.total_harga_transaction,i.id_product,i.id_transaction_header,h.no_transaction,h.tgl_trans,h.total_harga,h.user_id from transaction_item i join transaction_header h on i.id_transaction_header = h.id_transaction_header) n on n.id_product=p.id_product order by no_transaction asc";
+    "Select n.id_transaction_item, n.qty,n.total_harga_transaction, " +
+    "n.id_product,n.id_transaction_header,n.no_transaction,n.tgl_trans," +
+    "n.total_harga,n.user_id,p.imageURL,p.category,p.name,p.price_promo," +
+    "p.price,p.gender,p.stock from products p join " +
+    "(Select i.id_transaction_item, i.qty,i.total_harga_transaction," +
+    "i.id_product,i.id_transaction_header,h.no_transaction,h.tgl_trans," +
+    " h.total_harga,h.user_id from transaction_item i join " +
+    "transaction_header h on i.id_transaction_header = h.id_transaction_header)" +
+    "n on n.id_product=p.id_product order by no_transaction asc";
 
   db.query(qString, (err, result) => {
     if (err) {
@@ -59,7 +67,7 @@ app.get("/transaction", (req, res) => {
 });
 
 app.get("/product-all", (req, res) => {
-  const qString = "Select * from product_jamtangan";
+  const qString = "Select * from products";
   db.query(qString, (err, result) => {
     if (err) {
       res.status(400).json({
@@ -73,8 +81,7 @@ app.get("/product-all", (req, res) => {
   });
 });
 app.get("/category", (req, res) => {
-  const qString =
-    "select distinct category from product_jamtangan order by category asc";
+  const qString = "select name from brands order by name asc";
   db.query(qString, (err, result) => {
     if (err) {
       res.status(400).json({
@@ -146,8 +153,7 @@ app.get("/filter", (req, res) => {
 
   ///end
 
-  qString =
-    "Select * from product_jamtangan " + where + " order by name " + order;
+  qString = "Select * from products " + where + " order by name " + order;
 
   db.query(qString, (err, result) => {
     if (err) {
@@ -165,7 +171,7 @@ app.get("/filter", (req, res) => {
 
 app.get("/find", (req, res) => {
   console.log(req.query);
-  let qString = "Select * from product_jamtangan ";
+  let qString = "Select * from products ";
 
   qString = qString + " where name LIKE '%" + req.query.name + "%' ";
 

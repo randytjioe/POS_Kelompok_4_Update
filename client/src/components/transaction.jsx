@@ -62,6 +62,7 @@ export default function Transaction(props) {
   useEffect(() => {
     console.log(total);
   }, [total]);
+  console.log(selectedDates);
   return (
     <>
       <Center flexDir={"column"} className="table-trans">

@@ -10,6 +10,7 @@ import Cashier from "../components/cashier";
 
 export default function PageCahier() {
   const [data, setData] = useState();
+  const [datacat, setDataCat] = useState();
   const [datamen, setdatamen] = useState();
   const [datawomen, setdatawomen] = useState();
   const [dataall, setdataall] = useState();
@@ -17,46 +18,15 @@ export default function PageCahier() {
   const [isLoading, setIsLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [sort, setSort] = useState("ASC");
-  const [categories1, setCategories1] = useState([
-    "GARMIN",
-    "CASIO",
-    "ALBA",
-    "TIMEX",
-    "ALEXANDRE CHRISTIE",
-    "FOSSIL",
-  ]);
+  const [categories1, setCategories1] = useState([]);
 
-  const [gender, setGender] = useState(["men", "women"]);
-
-  const fetchFinPro = async (search) => {
-    let url = "";
-
-    url += `name=${search}`;
-
-    console.log(url);
-
-    await axiosInstance.get("/find?" + url).then((res) => {
-      setData(res.data.result);
-    });
-  };
+  const [gender, setGender] = useState([]);
 
   const fetchFilPro = async () => {
     let url = "";
     categories1.map((val, idx) => {
       idx ? (url += `&${val}=${val}`) : (url += `${val}=${val}`);
     });
-
-    const fetchFinPro = async (search) => {
-      let url = "";
-
-      url += `name=${search}`;
-
-      console.log(url);
-
-      await axiosInstance.get("/find?" + url).then((res) => {
-        setData(res.data.result);
-      });
-    };
 
     gender.map((val, idx) => {
       url ? (url += `&${val}=${val}`) : (url += `${val}=${val}`);
@@ -67,6 +37,18 @@ export default function PageCahier() {
     console.log(url);
 
     await axiosInstance.get("/filter?" + url).then((res) => {
+      setData(res.data.result);
+    });
+  };
+
+  const fetchFinPro = async (search) => {
+    let url = "";
+
+    url += `name=${search}`;
+
+    console.log(url);
+
+    await axiosInstance.get("/find?" + url).then((res) => {
       setData(res.data.result);
     });
   };
@@ -82,14 +64,20 @@ export default function PageCahier() {
   useEffect(() => {
     // fetchPosts();
     fetchData();
+    fetchDataCat();
     setTimeout(() => {
-      setIsLoading(!isLoading);
+      setIsLoading(false);
     }, 500);
   }, []);
 
   async function fetchData(categories1, gender) {
     await axiosInstance.get("/product-all").then((res) => {
       setData(res.data.result);
+    });
+  }
+  async function fetchDataCat(categories1, gender) {
+    await axiosInstance.get("/category").then((res) => {
+      setDataCat(res.data.result);
     });
   }
 
@@ -113,6 +101,7 @@ export default function PageCahier() {
               sort={[...sort]}
               setSort={setSort}
               filter={fetchFilPro}
+              data={datacat}
             />
           </Flex>
 
