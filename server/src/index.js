@@ -41,17 +41,65 @@ app.get("/product-men", (req, res) => {
   });
 });
 
+app.get("/full-transaction", (req, res) => {
+  const qString =
+    "Select n.id, n.qty,n.harga, " +
+    "n.product_id,n.trans_header_id,n.no_trans,n.tgl," +
+    "n.total,n.user_id,p.brand_id,p.name,p.harga,p.gender,p.stock,p.stock_update from products p join" +
+    "(Select i.id, i.qty,i.harga," +
+    "i.product_id,i.trans_header_id,h.no_trans,h.tgl," +
+    "h.total,h.user_id from trans_items i join " +
+    "trans_headers h on i.trans_header_id = h.id)" +
+    " n on n.product_id=p.id order by no_trans asc";
+
+  db.query(qString, (err, result) => {
+    if (err) {
+      res.status(400).json({
+        message: "query error",
+      });
+    }
+    res.status(200).json({
+      message: "data fetched",
+      result: result,
+    });
+  });
+});
+
 app.get("/transaction", (req, res) => {
   const qString =
-    "Select n.id_transaction_item, n.qty,n.total_harga_transaction, " +
-    "n.id_product,n.id_transaction_header,n.no_transaction,n.tgl_trans," +
-    "n.total_harga,n.user_id,p.imageURL,p.category,p.name,p.price_promo," +
-    "p.price,p.gender,p.stock from products p join " +
-    "(Select i.id_transaction_item, i.qty,i.total_harga_transaction," +
-    "i.id_product,i.id_transaction_header,h.no_transaction,h.tgl_trans," +
-    " h.total_harga,h.user_id from transaction_item i join " +
-    "transaction_header h on i.id_transaction_header = h.id_transaction_header)" +
-    "n on n.id_product=p.id_product order by no_transaction asc";
+    "Select no_trans,total,DATE_FORMAT(tgl, '%d/%m/%Y') as tgl from trans_headers;";
+
+  db.query(qString, (err, result) => {
+    if (err) {
+      res.status(400).json({
+        message: "query error",
+      });
+    }
+    res.status(200).json({
+      message: "data fetched",
+      result: result,
+    });
+  });
+});
+app.get("/transaction-chart", (req, res) => {
+  const qString =
+    "Select DATE_FORMAT(tgl, '%d/%m/%Y') as tgl,no_trans,total from trans_headers where DATE_FORMAT(tgl, '%d/%m/%Y')";
+
+  db.query(qString, (err, result) => {
+    if (err) {
+      res.status(400).json({
+        message: "query error",
+      });
+    }
+    res.status(200).json({
+      message: "data fetched",
+      result: result,
+    });
+  });
+});
+app.get("/transaction-item", (req, res) => {
+  const qString =
+    "Select i.qty,i.harga,p.name from trans_items i join products p on i.product_id=p.id;";
 
   db.query(qString, (err, result) => {
     if (err) {
@@ -67,7 +115,8 @@ app.get("/transaction", (req, res) => {
 });
 
 app.get("/product-all", (req, res) => {
-  const qString = "Select * from products";
+  const qString =
+    "Select p.name, p.stock,p.harga,p.image_url,b.name as category, p.gender, p.stock_update from products p join brands b on p.brand_id=b.id";
   db.query(qString, (err, result) => {
     if (err) {
       res.status(400).json({
@@ -126,11 +175,11 @@ app.get("/filter", (req, res) => {
       gender.map((val, idx) => {
         if (idx) {
           if (val) {
-            where += `or gender = '${val[0]}' `;
+            where += `or n.gender = '${val[0]}' `;
           }
         } else {
           if (val) {
-            where += ` gender = '${val[0]}' `;
+            where += ` n.gender = '${val[0]}' `;
           }
         }
       });
@@ -143,8 +192,8 @@ app.get("/filter", (req, res) => {
       console.log(categories);
       categories.map((val, idx) => {
         idx
-          ? (where += `or category = '${val[0]}' `)
-          : (where += ` category = '${val[0]}' `);
+          ? (where += `or n.category = '${val[0]}' `)
+          : (where += ` n.category = '${val[0]}' `);
       });
     }
 
@@ -153,11 +202,16 @@ app.get("/filter", (req, res) => {
 
   ///end
 
-  qString = "Select * from products " + where + " order by name " + order;
+  qString =
+    "Select * from (Select p.name, p.stock,p.harga,p.image_url,b.name as category, p.gender, p.stock_update from products p join brands b on p.brand_id=b.id) as n " +
+    where +
+    " order by name " +
+    order;
 
   db.query(qString, (err, result) => {
     if (err) {
-      res.status(400).json({
+      console.log(err);
+      return res.status(400).json({
         message: "query error",
       });
     }
@@ -178,7 +232,7 @@ app.get("/find", (req, res) => {
   console.log(qString);
   db.query(qString, (err, result) => {
     if (err) {
-      res.status(400).json({
+      return res.status(400).json({
         message: "query error",
       });
     }
@@ -190,6 +244,80 @@ app.get("/find", (req, res) => {
     });
   });
 });
+
+app.get("/fildate", (req, res) => {
+  console.log(req.query);
+  let qString =
+    "Select DATE_FORMAT(tgl, '%d/%m/%Y') as tgl,no_trans,total from trans_headers where tgl BETWEEN '" +
+    req.query.datefrom +
+    "' AND '" +
+    req.query.dateend +
+    "'";
+
+  console.log(qString);
+  db.query(qString, (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        message: "query error",
+      });
+    }
+
+    console.log(res.data);
+    res.status(200).json({
+      message: "data fetched",
+      result: result,
+    });
+  });
+});
+
+app.get("/fildatepro", (req, res) => {
+  console.log(req.query);
+  let qString =
+    "select * from trans_headers h join (Select i.qty,i.harga,i.trans_header_id,p.name from trans_items i join products p on i.product_id=p.id) n on n.trans_header_id=h.id  where h.tgl BETWEEN '" +
+    req.query.datefrom +
+    "' AND '" +
+    req.query.dateend +
+    "'";
+
+  console.log(qString);
+  db.query(qString, (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        message: "query error",
+      });
+    }
+
+    console.log(res.data);
+    res.status(200).json({
+      message: "data fetched",
+      result: result,
+    });
+  });
+});
+
+// app.get("/date", (req, res) => {
+//   console.log(req.query);
+//   let qString = "Select * from products ";
+
+//   qString = qString + " where name LIKE '%" + req.query.name + "%' ";
+
+//   console.log(qString);
+//   db.query(qString, (err, result) => {
+//     if (err) {
+//       return res.status(400).json({
+//         message: "query error",
+//       });
+//     }
+
+//     console.log(res.data);
+//     res.status(200).json({
+//       message: "data fetched",
+//       result: result,
+//     });
+//   });
+// });
 
 app.listen(2000, () => {
   console.log("api is running");

@@ -44,25 +44,61 @@ import { RangeDatepicker } from "chakra-dayzed-datepicker";
 
 export default function Transaction(props) {
   const data = props.data;
+  const dataItem = props.dataItem;
   // const [startDate, endDate] = dateRange;
   const [total, setTotal] = useState(0);
+  const [totalProduct, setTotalProduct] = useState(0);
+  const [totalHargaProduct, setTotalHargaProduct] = useState(0);
   const [selectedDates, setSelectedDates] = useState([new Date(), new Date()]);
+  // const dateFormatter = new Intl.DateTimeFormat("id", {
+  //   day: "numeric",
+  //   month: "numeric",
+  //   year: "numeric",
+  // });
+  // const datefrom = dateFormatter.format(selectedDates[0]);
+  // const dateend = dateFormatter.format(selectedDates[1]);
+
   useEffect(() => {
     console.log(data);
     if (data) {
       setTotal(
-        data?.reduce(
-          (partialSum, product) => partialSum + product.total_harga,
-          0
-        )
+        data?.reduce((partialSum, product) => partialSum + product.total, 0)
       );
     }
   }, [data]);
 
   useEffect(() => {
+    console.log(dataItem);
+    if (dataItem) {
+      setTotalProduct(
+        dataItem?.reduce((partialSum, product) => partialSum + product.qty, 0)
+      );
+    }
+  }, [dataItem]);
+
+  useEffect(() => {
+    console.log(dataItem);
+    if (dataItem) {
+      setTotalHargaProduct(
+        dataItem?.reduce((partialSum, product) => partialSum + product.harga, 0)
+      );
+    }
+  }, [dataItem]);
+
+  useEffect(() => {
     console.log(total);
   }, [total]);
-  console.log(selectedDates);
+  useEffect(() => {
+    console.log(totalProduct);
+  }, [totalProduct]);
+  useEffect(() => {
+    console.log(totalHargaProduct);
+  }, [totalHargaProduct]);
+  useEffect(() => {
+    // const m = moment(selectedDates[0]).format("YYYY-MM-DD");
+    // console.log(m);
+    console.log(selectedDates);
+  }, [selectedDates]);
   return (
     <>
       <Center flexDir={"column"} className="table-trans">
@@ -72,7 +108,14 @@ export default function Transaction(props) {
             selectedDates={selectedDates}
             onDateChange={setSelectedDates}
           />
-          <Button>Filter</Button>
+          <Button
+            onClick={() => {
+              props?.filter(selectedDates[0], selectedDates[1]);
+              props?.filterpro(selectedDates[0], selectedDates[1]);
+            }}
+          >
+            Filter
+          </Button>
         </Center>
         <Flex>
           <Flex flexDir={"column"} className="table-trans">
@@ -86,7 +129,7 @@ export default function Transaction(props) {
                 </h2>
                 <AccordionPanel pb={4}>
                   <TableContainer>
-                    <Table variant="striped" colorScheme="teal">
+                    <Table variant="striped" colorScheme={"orange"}>
                       {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
                       <Thead>
                         <Tr>
@@ -100,11 +143,9 @@ export default function Transaction(props) {
                           return (
                             <>
                               <Tr>
-                                <Td>{product?.no_transaction}</Td>
-                                <Td>{product?.tgl_trans}</Td>
-                                <Td>
-                                  Rp. {product?.total_harga.toLocaleString()}
-                                </Td>
+                                <Td>{product?.no_trans}</Td>
+                                <Td>{product?.tgl}</Td>
+                                <Td>Rp. {product?.total.toLocaleString()}</Td>
                               </Tr>
                             </>
                           );
@@ -137,19 +178,19 @@ export default function Transaction(props) {
                       {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
                       <Thead>
                         <Tr>
-                          <Th>No Transaction</Th>
                           <Th>Nama Produk</Th>
                           <Th>Jumlah</Th>
+                          <Th>Harga</Th>
                         </Tr>
                       </Thead>
                       <Tbody>
-                        {data?.map((product) => {
+                        {dataItem?.map((product) => {
                           return (
                             <>
                               <Tr>
-                                <Td>{product?.no_transaction}</Td>
                                 <Td>{product?.name}</Td>
-                                <Td> {product?.qty}</Td>
+                                <Td>{product?.qty}</Td>
+                                <Td> {product?.harga}</Td>
                               </Tr>
                             </>
                           );
@@ -158,8 +199,10 @@ export default function Transaction(props) {
                       <Tfoot>
                         <Tr>
                           <Th>TOTAL</Th>
-                          <Th></Th>
-                          <Th isNumeric>Rp. {total.toLocaleString()}</Th>
+                          <Th> {totalProduct.toLocaleString()}</Th>
+                          <Th isNumeric>
+                            Rp. {totalHargaProduct.toLocaleString()}
+                          </Th>
                         </Tr>
                       </Tfoot>
                     </Table>

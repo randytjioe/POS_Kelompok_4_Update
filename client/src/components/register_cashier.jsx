@@ -1,110 +1,147 @@
 import {
-    Flex,
-    Box,
-    FormControl,
-    FormLabel,
-    Input,
-    InputGroup,
-    HStack,
-    InputRightElement,
-    Stack,
-    Button,
-    Heading,
-    Text,
-    useColorModeValue,
-    Link,
-  } from "@chakra-ui/react";
-  import { useState } from "react";
-  import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-  
-  export default function Register() {
-    const [showPassword, setShowPassword] = useState(false);
-  
-    return (
-      <Flex
-        minH={"100vh"}
-        align={"center"}
-        justify={"center"}
-        bgImage={"https://wallpapercave.com/wp/wp3989698.jpg"}
-      >
-        <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-          <Stack align={"center"}>
-            <Heading
-              fontSize={"4xl"}
-              textAlign={"center"}
-              color={"white"}
-              outlineColor={"black"}
-            >
-              Sign Up
-            </Heading>
-            <Text
-              fontSize={"lg"}
-              color={"white"}
-              outline=""
-              outlineColor={"black"}
-            >
-              For new user
-            </Text>
-          </Stack>
-          <Box
-            w={"500px"}
-            align={"center"}
-            justify={"center"}
-            rounded={"lg"}
-            bg={useColorModeValue("white", "gray.700")}
-            boxShadow={"lg"}
-            p={8}
-          >
-            <Stack spacing={4}>
-              <FormControl id="Nama Lengkap" isRequired>
-                <FormLabel>Nama Lengkap</FormLabel>
-                <Input type="Nama Lengkap" />
-              </FormControl>
-              <FormControl id="username" isRequired>
-                <FormLabel>Username</FormLabel>
-                <Input type="username" />
-              </FormControl>
-              <FormControl id="email" isRequired>
-                <FormLabel>Email address</FormLabel>
-                <Input type="email" />
-              </FormControl>
-              <FormControl id="password" isRequired>
-                <FormLabel>Password</FormLabel>
-                <InputGroup>
-                  <Input type={showPassword ? "text" : "password"} />
-                  <InputRightElement h={"full"}>
-                    <Button
-                      variant={"ghost"}
-                      onClick={() =>
-                        setShowPassword((showPassword) => !showPassword)
-                      }
-                    >
-                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-              </FormControl>
-              <Stack spacing={10} pt={2}>
-                <Button
-                  loadingText="Submitting"
-                  size="lg"
-                  bg={"blue.400"}
-                  color={"white"}
-                  _hover={{
-                    bg: "blue.500",
-                  }}
+  Flex,
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
+  InputGroup,
+  HStack,
+  InputRightElement,
+  Stack,
+  Button,
+  Heading,
+  Text,
+  useColorModeValue,
+  Link,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  FormErrorMessage,
+} from "@chakra-ui/react";
+import { useState, useRef } from "react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { useDisclosure } from "@chakra-ui/react";
+import { Formik, Field } from "formik";
+import * as Yup from "yup";
+
+export default function Register() {
+  const [showPassword, setShowPassword] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const initialRef = useRef(null);
+  const finalRef = useRef(null);
+
+  return (
+    <>
+      <Flex onClick={onOpen}>SIGN UP</Flex>
+
+      <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
+        <Formik
+          initialValues={{
+            fullname: "",
+            username: "",
+            email: "",
+            password: "",
+          }}
+          //   validationSchema={Yup.object().shape({
+          //     email: Yup.string().email("bukan email"),
+          //   })}
+          onSubmit={(values) => {
+            // alert(JSON.stringify(values, null, 2));
+          }}
+        >
+          {({ handleSubmit, isSubmitting, errors, touched }) => (
+            <ModalContent>
+              <ModalHeader>Create your account</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody pb={6}>
+                <FormControl>
+                  <FormLabel>Full Name</FormLabel>
+                  <Input ref={initialRef} />
+                </FormControl>
+
+                <FormControl id="username" isRequired>
+                  <FormLabel>Username</FormLabel>
+                  <Input type="username" />
+                </FormControl>
+
+                <FormControl
+                  isInvalid={!!errors.email && touched.email}
+                  mt={4}
+                  onSubmit={handleSubmit}
+                  id="email"
+                  isRequired
                 >
-                  Sign up
+                  <FormLabel htmlFor="email">Email Address</FormLabel>
+                  <Field
+                    as={Input}
+                    id="email"
+                    name="email"
+                    type="email"
+                    variant="filled"
+                    validate={(value) => {
+                      let error;
+                      //   alert(value);
+                      let cek = value.includes("@");
+                      if (!cek) {
+                        error = "Please enter a valid email";
+                        console.log(error);
+                      }
+
+                      return error;
+                    }}
+                  />
+                  <FormErrorMessage>{errors.email}</FormErrorMessage>
+                </FormControl>
+
+                <FormControl
+                  isInvalid={!!errors.password && touched.password}
+                  id="password"
+                  isRequired
+                >
+                  <FormLabel htmlFor="password">Password</FormLabel>
+                  <Field
+                    as={Input}
+                    id="password"
+                    name="password"
+                    type="password"
+                    variant="filled"
+                    validate={(value) => {
+                      let error;
+
+                      if (value.length < 8) {
+                        error = "Password must contain at least 8 characters";
+                      }
+
+                      return error;
+                    }}
+                  />
+
+                  <FormErrorMessage>{errors.password}</FormErrorMessage>
+                </FormControl>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  type="submit"
+                  onSubmit={touched}
+                >
+                  Submit
                 </Button>
-              </Stack>
-              <Stack pt={6}>
-                <Text align={"center"}>
-                  Already a user? <Link color={"blue.400"}>Login</Link>
-                </Text>
-              </Stack>
-            </Stack>
-          </Box>
-        </Stack>
-      </Flex>
-    );
-  }
+                <Button onClick={onClose} colorScheme="red">
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          )}
+        </Formik>
+      </Modal>
+    </>
+  );
+}

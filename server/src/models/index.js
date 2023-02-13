@@ -35,4 +35,17 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+db.user = require("./user")(sequelize,Sequelize)
+db.product = require("./product")(sequelize,Sequelize)
+db.gender = require("./gender")(sequelize,Sequelize)
+db.brand = require ("./brand")(sequelize,Sequelize)
+db.trans_header = require ("./trans_header")(sequelize,Sequelize)
+db.trans_item = require ("./trans_item")(sequelize,Sequelize)
+
+
+db.product.belongsTo(db.brand,{foreignKey:"brand_id",as:"Brand"})
+db.product.belongsTo(db.gender,{foreignKey:"gender_id",as:"Gender"})
+db.trans_header.belongsTo(db.user,{foreignKey:"user_id",as:"User"})
+db.trans_item.belongsTo(db.product,{foreignKey:"product_id",as:"Product"})
+db.trans_item.belongsTo(db.trans_header,{foreignKey:"trans_header_id",as:"Trans_Header"})
 module.exports = db;

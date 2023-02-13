@@ -53,6 +53,7 @@ import {
 } from "react-icons/fi";
 import { BsFillArrowRightCircleFill } from "react-icons/bs";
 import { FaPowerOff } from "react-icons/fa";
+import Register from "./register_cashier";
 
 export default function Sidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -233,16 +234,22 @@ export default function Sidebar() {
                 TRANSACTION
               </Link>
             </Flex>
-            {/* <Divider orientation="horizontal" py={2}/> */}
-
-            {/* <Flex w="207px" h="56px"  alignItems={'center'}
-        _hover={{
-          bg: 'grey',
-          color: 'black',
-        }} py={2}>
-          <Icon as={FaPowerOff} color="white" mx={2}/>
-          <Link as="b" mx={3}  fontSize={16} color="white" > LOG OUT</Link>
-          </Flex> */}
+            <Divider orientation="horizontal" py={2} />
+            <Flex
+              w="207px"
+              h="56px"
+              alignItems={"center"}
+              _hover={{
+                bg: "orange",
+                color: "black",
+              }}
+              py={2}
+            >
+              <Icon as={FaPowerOff} color="black" mx={2} />
+              <Link mx={3} fontWeight="bold" fontSize="20px" color="black">
+                <Register />
+              </Link>
+            </Flex>
           </Flex>
         </Flex>
       </Flex>

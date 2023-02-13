@@ -1,17 +1,21 @@
 import { Box } from "@chakra-ui/react";
 import LineChart from "./charts/LineChart";
 
-export default function ChartComponent() {
+export default function ChartComponent(props) {
+  const data = props.data;
 
-const chartData  = [
+  const x = data?.map((product) => product?.tgl);
+  const y = data?.map((product) => product?.total);
+  console.log(x);
+  const chartData = [
     {
-      name: "Revenue",
-      data: [50, 64, 48, 66, 49, 68],
+      name: "Total",
+      data: y,
     },
-    {
-      name: "Profit",
-      data: [30, 40, 24, 46, 20, 46],
-    },
+    // {
+    //   name: "Profit",
+    //   data: [30, 40, 24, 46, 20, 46],
+    // },
   ];
 
   const lineChartOptionsTotalSpent = {
@@ -56,7 +60,7 @@ const chartData  = [
     },
     xaxis: {
       type: "numeric",
-      categories: ["SEP", "OCT", "NOV", "DEC", "JAN", "FEB"],
+      categories: x,
       labels: {
         style: {
           colors: "#A3AED0",
@@ -86,15 +90,15 @@ const chartData  = [
     },
     color: ["#7551FF", "#39B8FF"],
   };
-  
-    return (
-        <>
-     <Box minH='260px' minW='75%' mt='auto' >
-          <LineChart
-            chartData={chartData}
-            chartOptions={lineChartOptionsTotalSpent}
-          />
-        </Box>
-        </>
-    )
+
+  return (
+    <>
+      <Box minH="260px" minW="75%" mt="auto">
+        <LineChart
+          chartData={chartData}
+          chartOptions={lineChartOptionsTotalSpent}
+        />
+      </Box>
+    </>
+  );
 }

@@ -81,8 +81,6 @@ export default function PageProducts() {
   return (
     <>
       {isLoading ? (
-        // <Loading/>
-
         <Center w={"100vw"} h="100vh" alignContent={"center"}>
           <Spinner size={"xl"} thickness="10px" color="blue.500" />
         </Center>
