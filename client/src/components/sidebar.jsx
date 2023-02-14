@@ -235,7 +235,7 @@ export default function Sidebar() {
               </Link>
             </Flex>
             <Divider orientation="horizontal" py={2} />
-            <Flex
+            {/* <Flex
               w="207px"
               h="56px"
               alignItems={"center"}
@@ -249,7 +249,7 @@ export default function Sidebar() {
               <Link mx={3} fontWeight="bold" fontSize="20px" color="black">
                 <Register />
               </Link>
-            </Flex>
+            </Flex> */}
           </Flex>
         </Flex>
       </Flex>

@@ -8,15 +8,29 @@ import { axiosInstance } from "../config/config";
 
 export default function PageAdmin() {
   const [data, setData] = useState();
+  const [dataBar, setDataBar] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   async function fetchData(categories1, gender) {
     await axiosInstance.get("/transaction-chart").then((res) => {
       setData(res.data.result);
     });
   }
+  async function fetchDataBar(categories1, gender) {
+    await axiosInstance
+      .get("/transaction-bar")
+      .then((res) => {
+        console.log(res.data.result);
+        // console.log(res.data.result);
+        setDataBar([...res.data.result]);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }
   useEffect(() => {
     // fetchPosts();
     fetchData();
+    fetchDataBar();
 
     setTimeout(() => {
       setIsLoading(false);
@@ -35,11 +49,7 @@ export default function PageAdmin() {
             <SideBar />
           </Flex>
           <Center marginLeft={"100px"} flexDir="column" marginTop={"20px"}>
-            <Flex fontWeight="bold" fontSize="20px">
-              {" "}
-              REPORT TRANSACTION
-            </Flex>
-            <ChartComponent data={data} />
+            <ChartComponent data={data} dataBar={dataBar} />
           </Center>
         </>
       )}

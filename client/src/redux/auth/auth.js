@@ -1,7 +1,29 @@
-const user_types = {
-    USER_LOGIN : "USER_LOGIN",
-    USER_LOGOUT : "USER_LOGOUT",
-    
-}
+import user_types from "./types";
+const init_state = {
+  id: 0,
+  username: "",
+  password: "",
+  name: "",
+  email: "",
+  isadmin: false,
+  avatar_url: "",
+};
 
-export default user_types;
+function userReducer(state = init_state, action) {
+  if (action.type === user_types.USER_LOGIN) {
+    return {
+      ...state,
+      id: action.payload.id,
+      username: action.payload.username,
+      password: action.payload.password,
+      name: action.payload.name,
+      email: action.payload.email,
+      isadmin: action.payload.isadmin,
+      // avatar_url:action.payload.avatar_url
+    };
+  } else if (action.type === user_types.USER_LOGOUT) {
+    return init_state;
+  }
+  return state;
+}
+export default userReducer;

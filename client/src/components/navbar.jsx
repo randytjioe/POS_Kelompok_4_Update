@@ -26,7 +26,7 @@ import {
   Avatar,
   Center,
 } from "@chakra-ui/react";
-
+import Register from "./register_cashier";
 import Avatar1 from "../assets/avatar.png";
 import Logo from "../assets/logo.png";
 import { AiOutlineSearch, AiOutlinePlus } from "react-icons/ai";
@@ -35,6 +35,7 @@ import { MdOutlineFavoriteBorder } from "react-icons/md";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { Link as ReachLink } from "react-router-dom";
 import { useRef } from "react";
+import { useSelector } from "react-redux";
 import {
   FiHome,
   FiTrendingUp,
@@ -48,9 +49,10 @@ import {
   FiWatch,
 } from "react-icons/fi";
 import { useEffect, useState } from "react";
+
 export default function Navbar(props) {
   const data = props.data;
-
+  const userSelector = useSelector((state) => state.auth);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [search, setSearch] = useState("");
   const initialRef = useRef(null);
@@ -173,10 +175,10 @@ export default function Navbar(props) {
                 </Center>
                 <Flex flexDir={"column"} px="10px" justifyContent={"center"}>
                   <Flex fontSize={"16px"} color="black">
-                    Muhammad Iqbal Fazlur Rahman
+                    {userSelector?.name}
                   </Flex>
                   <Flex fontSize={"12px"} color="#F68522" fontWeight={"bold"}>
-                    ADMIN
+                    {userSelector?.isadmin ? "ADMIN" : "CASHIER"}
                   </Flex>
                 </Flex>
               </Flex>
@@ -201,8 +203,8 @@ export default function Navbar(props) {
                   gap={2}
                 >
                   <ListItem>
-                    <Link to="/register" as={ReachLink}>
-                      Buat Akun
+                    <Link>
+                      <Register />
                     </Link>{" "}
                   </ListItem>
                   <Divider orientation="horizontal" py={2} />

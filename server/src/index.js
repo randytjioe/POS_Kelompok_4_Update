@@ -1,8 +1,17 @@
 const express = require("express");
 const app = express();
 app.use(express.json());
+const dotenv = require("dotenv");
+dotenv.config();
 const mysql = require("mysql2");
 const cors = require("cors");
+const {
+  authRoutes,
+  productRoutes,
+  brandRoutes,
+  genderRoutes,
+  transRoutes,
+} = require("./routes");
 app.use(cors());
 const options = {
   origin: "http://localhost:3000",
@@ -25,6 +34,9 @@ db.connect((err) => {
     console.log("db connected");
   }
 });
+
+app.use("/auth", authRoutes);
+app.use("/transaction", transRoutes);
 
 app.get("/product-men", (req, res) => {
   const qString = "Select * from products where gender = 1";
@@ -97,6 +109,24 @@ app.get("/transaction-chart", (req, res) => {
     });
   });
 });
+
+app.get("/transaction-bar", (req, res) => {
+  const qString =
+    "SELECT b.name,n.jumlah from brands b join (SELECT p.brand_id,sum(qty) as jumlah FROM trans_items i join products p on p.id=i.product_id group by brand_id) n on n.brand_id=b.id order by name asc";
+
+  db.query(qString, (err, result) => {
+    if (err) {
+      res.status(400).json({
+        message: "query error",
+      });
+    }
+    res.status(200).json({
+      message: "data fetched",
+      result: result,
+    });
+  });
+});
+
 app.get("/transaction-item", (req, res) => {
   const qString =
     "Select i.qty,i.harga,p.name from trans_items i join products p on i.product_id=p.id;";
@@ -116,7 +146,7 @@ app.get("/transaction-item", (req, res) => {
 
 app.get("/product-all", (req, res) => {
   const qString =
-    "Select p.name, p.stock,p.harga,p.image_url,b.name as category, p.gender, p.stock_update from products p join brands b on p.brand_id=b.id";
+    "Select p.id, p.name, p.stock,p.harga,p.image_url,b.name as category, p.gender, p.stock_update from products p join brands b on p.brand_id=b.id where stock > 0";
   db.query(qString, (err, result) => {
     if (err) {
       res.status(400).json({
@@ -205,7 +235,7 @@ app.get("/filter", (req, res) => {
   qString =
     "Select * from (Select p.name, p.stock,p.harga,p.image_url,b.name as category, p.gender, p.stock_update from products p join brands b on p.brand_id=b.id) as n " +
     where +
-    " order by name " +
+    "and stock > 0 order by name " +
     order;
 
   db.query(qString, (err, result) => {
@@ -322,3 +352,10 @@ app.get("/fildatepro", (req, res) => {
 app.listen(2000, () => {
   console.log("api is running");
 });
+
+app.use("/auth", authRoutes);
+app.use("/product", productRoutes);
+app.use("/gender", genderRoutes);
+app.use("/brand", brandRoutes);
+app.use("/transaction1", transRoutes);
+app.use("/post_image", express.static(`${__dirname}/public/IMAGE_PRODUCT`));

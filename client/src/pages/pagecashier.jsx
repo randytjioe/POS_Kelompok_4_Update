@@ -72,6 +72,7 @@ export default function PageCahier() {
 
   async function fetchData(categories1, gender) {
     await axiosInstance.get("/product-all").then((res) => {
+      console.log(res.data.result);
       setData(res.data.result);
     });
   }
@@ -105,7 +106,7 @@ export default function PageCahier() {
             />
           </Flex>
 
-          <Cashier data={data} id="women" />
+          <Cashier data={data} id="cashier" />
           {/* <Products data={data} id="men"/> */}
         </>
       )}

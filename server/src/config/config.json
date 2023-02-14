@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": "doni12345",
-    "database": "db_jamtangan",
+    "password": "password",
+    "database": "project_pos",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

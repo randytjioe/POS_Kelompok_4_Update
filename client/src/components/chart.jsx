@@ -1,12 +1,252 @@
 import { Box } from "@chakra-ui/react";
 import LineChart from "./charts/LineChart";
+import BarChart from "./charts/BarChart";
+import {
+  Flex,
+  Image,
+  InputGroup,
+  InputRightElement,
+  Input,
+  InputRightAddon,
+  List,
+  ListItem,
+  Divider,
+  Button,
+  Grid,
+  GridItem,
+  Icon,
+  Center,
+  IconButton,
+  Slide,
+  Text,
+  Stack,
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionIcon,
+  AccordionPanel,
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
 export default function ChartComponent(props) {
   const data = props.data;
+  // const databar = props.dataBar;
 
   const x = data?.map((product) => product?.tgl);
   const y = data?.map((product) => product?.total);
-  console.log(x);
+  const [option, setOption] = useState([]);
+  const [barData, setBarData] = useState([]);
+
+  useEffect(() => {
+    // console.log(databar);
+    setOption([...props.dataBar?.map((product) => product?.name)]);
+    setBarData([...props.dataBar?.map((product) => parseInt(product?.jumlah))]);
+  }, []);
+
+  const [barChartDataConsumption, setBarChartDataConsumption] = useState([
+    {
+      name: "PRODUCT A",
+      data: [],
+    },
+  ]);
+
+  const [barChartOptionsConsumption, setBarChartOptionsConsumption] = useState({
+    chart: {
+      stacked: true,
+      toolbar: {
+        show: false,
+      },
+    },
+    tooltip: {
+      style: {
+        fontSize: "12px",
+        fontFamily: undefined,
+      },
+      onDatasetHover: {
+        style: {
+          fontSize: "12px",
+          fontFamily: undefined,
+        },
+      },
+      theme: "dark",
+    },
+    xaxis: {
+      categories: [],
+      show: false,
+      labels: {
+        show: true,
+        style: {
+          colors: "#A3AED0",
+          fontSize: "14px",
+          fontWeight: "500",
+        },
+      },
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false,
+      },
+    },
+    yaxis: {
+      show: false,
+      color: "black",
+      labels: {
+        show: false,
+        style: {
+          colors: "#A3AED0",
+          fontSize: "14px",
+          fontWeight: "500",
+        },
+      },
+    },
+
+    grid: {
+      borderColor: "rgba(163, 174, 208, 0.3)",
+      show: true,
+      yaxis: {
+        lines: {
+          show: false,
+          opacity: 0.5,
+        },
+      },
+      row: {
+        opacity: 0.5,
+      },
+      xaxis: {
+        lines: {
+          show: false,
+        },
+      },
+    },
+    fill: {
+      type: "solid",
+      colors: ["#5E37FF", "#6AD2FF", "#E1E9F8"],
+    },
+    legend: {
+      show: false,
+    },
+    colors: ["#5E37FF", "#6AD2FF", "#E1E9F8"],
+    dataLabels: {
+      enabled: false,
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 10,
+        columnWidth: "20px",
+      },
+    },
+  });
+
+  useEffect(() => {
+    setBarChartOptionsConsumption({
+      chart: {
+        stacked: true,
+        toolbar: {
+          show: false,
+        },
+      },
+      tooltip: {
+        style: {
+          fontSize: "12px",
+          fontFamily: undefined,
+        },
+        onDatasetHover: {
+          style: {
+            fontSize: "12px",
+            fontFamily: undefined,
+          },
+        },
+        theme: "dark",
+      },
+      xaxis: {
+        categories: option,
+        show: false,
+        labels: {
+          show: true,
+          style: {
+            colors: "#A3AED0",
+            fontSize: "14px",
+            fontWeight: "500",
+          },
+        },
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+      },
+      yaxis: {
+        show: false,
+        color: "black",
+        labels: {
+          show: false,
+          style: {
+            colors: "#A3AED0",
+            fontSize: "14px",
+            fontWeight: "500",
+          },
+        },
+      },
+
+      grid: {
+        borderColor: "rgba(163, 174, 208, 0.3)",
+        show: true,
+        yaxis: {
+          lines: {
+            show: false,
+            opacity: 0.5,
+          },
+        },
+        row: {
+          opacity: 0.5,
+        },
+        xaxis: {
+          lines: {
+            show: false,
+          },
+        },
+      },
+      fill: {
+        type: "solid",
+        colors: ["#5E37FF", "#6AD2FF", "#E1E9F8"],
+      },
+      legend: {
+        show: false,
+      },
+      colors: ["#5E37FF", "#6AD2FF", "#E1E9F8"],
+      dataLabels: {
+        enabled: false,
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 10,
+          columnWidth: "20px",
+        },
+      },
+    });
+    console.log(option);
+  }, [option]);
+  useEffect(() => {
+    setBarChartDataConsumption([
+      {
+        name: "Total",
+        data: barData,
+      },
+    ]);
+    console.log(barData);
+  }, [barData]);
+
   const chartData = [
     {
       name: "Total",
@@ -93,12 +333,30 @@ export default function ChartComponent(props) {
 
   return (
     <>
-      <Box minH="260px" minW="75%" mt="auto">
+      <Flex
+        px={"200px"}
+        w="full"
+        maxH="600px"
+        mt="auto"
+        flexDir={"column"}
+        gap={3}
+      >
+        <Center fontWeight="bold" fontSize="20px">
+          REPORT TRANSACTION DAY BY DAY
+        </Center>
         <LineChart
           chartData={chartData}
           chartOptions={lineChartOptionsTotalSpent}
         />
-      </Box>
+        <Center fontWeight="bold" fontSize="20px">
+          {" "}
+          REPORT TRANSACTION BRAND{" "}
+        </Center>
+        <BarChart
+          chartData={barChartDataConsumption}
+          chartOptions={barChartOptionsConsumption}
+        />
+      </Flex>
     </>
   );
 }

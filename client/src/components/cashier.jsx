@@ -22,7 +22,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
-
+import axios from "axios";
 export default function Cashier(props) {
   const data = props.data;
 
@@ -55,7 +55,7 @@ export default function Cashier(props) {
   };
 
   useEffect(() => {
-    // console.log(orderList);
+    console.log(orderList);
   }, [orderList]);
 
   const handleDeleteFromCart = (product) => {
@@ -65,7 +65,25 @@ export default function Cashier(props) {
     temp.splice(index, 1);
     setOrderList(temp);
   };
-
+  async function ConfirmTransaction() {
+    const total = orderList.reduce(
+      (total, data) => total + data.total_harga_transaction,
+      0
+    );
+    console.log(total);
+    await axios
+      .post("http://localhost:2000/transaction/v2", {
+        user_id: 1,
+        total: total,
+        orderList: JSON.stringify([...orderList]),
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          alert("berhasil");
+          setOrderList([]);
+        }
+      });
+  }
   return (
     <>
       <Flex p={5} h="100vh" marginLeft="210px" overflow={"auto"}>
@@ -122,7 +140,9 @@ export default function Cashier(props) {
               justifyContent="space-around"
               gap={100}
             >
-              <Button colorScheme={"cyan"}>Confirm</Button>
+              <Button colorScheme={"cyan"} onClick={ConfirmTransaction}>
+                Confirm
+              </Button>
               <Button
                 mt={"1px"}
                 onClick={() => setOrderList([])}
