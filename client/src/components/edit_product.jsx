@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -6,17 +6,21 @@ import {
   Stack,
   Image,
   List,
+  Link,
   ListItem,
   Button,
   Divider,
 } from "@chakra-ui/react";
 import { axiosInstance } from "../config/config";
+import { Link as ReachLink } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
 export default function EditProduct(props) {
   const data = props.data;
 
   const [orderList, setOrderList] = useState([]);
 
-  const handleAddToCart = (product) => {
+  const handleEditToCart = (product) => {
     setOrderList([...orderList, product]);
   };
 
@@ -39,7 +43,11 @@ export default function EditProduct(props) {
           </Flex>
           <Flex spacing={5} flexWrap="wrap" gap={3}>
             {data?.map((product) => (
-              <Product product={product} handleAddToCart={handleAddToCart} />
+              <Product
+                delete={props.delete}
+                product={product}
+                handleEditToCart={handleEditToCart}
+              />
             ))}
           </Flex>
         </Flex>
@@ -96,16 +104,18 @@ function Product(props) {
         </Flex>
 
         <Flex gap={3}>
+          <Link to={"/products/" + props.product?.id} as={ReachLink}>
+            <Button
+              mt={2}
+              // onClick={() => handleEditToCart(product)}
+              colorScheme="green"
+            >
+              Edit
+            </Button>
+          </Link>
           <Button
             mt={2}
-            // onClick={() => handleAddToCart(product)}
-            colorScheme="green"
-          >
-            Edit
-          </Button>
-          <Button
-            mt={2}
-            // onClick={() => handleDeleteFromCart(product)}
+            onClick={() => props.delete(props.product?.id)}
             colorScheme="red"
           >
             Delete

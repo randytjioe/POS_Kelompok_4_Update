@@ -145,7 +145,7 @@ export default function Transaction(props) {
                               <Tr>
                                 <Td>{product?.no_trans}</Td>
                                 <Td>{product?.tgl}</Td>
-                                <Td>Rp. {product?.total.toLocaleString()}</Td>
+                                <Td>Rp. {product?.total?.toLocaleString()}</Td>
                               </Tr>
                             </>
                           );

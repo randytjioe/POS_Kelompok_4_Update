@@ -15,6 +15,17 @@ export default function PageAdmin() {
       setData(res.data.result);
     });
   }
+  const fetchFinPro = async (search) => {
+    let url = "";
+
+    url += `name=${search}`;
+
+    console.log(url);
+
+    await axiosInstance.get("/find?" + url).then((res) => {
+      setData(res.data.result);
+    });
+  };
   async function fetchDataBar(categories1, gender) {
     await axiosInstance
       .get("/transaction-bar")
@@ -44,7 +55,7 @@ export default function PageAdmin() {
         </Center>
       ) : (
         <>
-          <NavBar />
+          <NavBar filter={fetchFinPro} />
           <Flex flexDir={"row"} pos="fixed" top="70" left={"0"}>
             <SideBar />
           </Flex>

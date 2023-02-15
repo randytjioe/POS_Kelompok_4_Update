@@ -69,22 +69,9 @@ export default function ProductPage(props) {
         </Flex>
         {/* <Flex > */}
 
-        {/* <Center minW="60px" h={"366px"}>
-          <IconButton
-        aria-label="right-arrow"
-        colorScheme="grey"
-        borderRadius="full"
-        borderStyle={"none"}
-        variant='outline'
-        zIndex={2}
-        onClick={()=> Slide("left")}>
-        <BiLeftArrowAlt />
-      </IconButton>
-          </Center> */}
-
         <Flex
           zIndex={40}
-          w="1200px"
+          w="1050px"
           gap={2}
           paddingTop="20px"
           paddingBottom={"20px"}
@@ -194,19 +181,47 @@ export default function ProductPage(props) {
             );
           })}
         </Flex>
+        <Center gap={20}>
+          <Center minW="60px" h={"60px"}>
+            <IconButton
+              aria-label="right-arrow"
+              colorScheme="grey"
+              borderRadius="full"
+              borderStyle={"none"}
+              variant="outline"
+              zIndex={2}
+              onClick={() => {
+                if (props.page - 6 < 0) {
+                  props.setPage(0);
+                } else {
+                  props.setPage(props.page - 6);
+                }
+
+                props.fetchData(props.page - 6);
+              }}
+            >
+              <BiLeftArrowAlt />
+            </IconButton>
+          </Center>
+
+          <Center minW="60px" h={"60px"}>
+            <IconButton
+              aria-label="right-arrow"
+              colorScheme="gray"
+              borderRadius="full"
+              borderStyle={"none"}
+              variant="outline"
+              zIndex={2}
+              onClick={() => {
+                props.setPage(props.page + 6);
+                props.fetchData(props.page + 6);
+              }}
+            >
+              <BiRightArrowAlt />
+            </IconButton>
+          </Center>
+        </Center>
       </Flex>
-      {/* <Center minW="60px" h={"366px"}>
-    <IconButton
-        aria-label="right-arrow"
-        colorScheme='gray'
-        borderRadius="full"
-        borderStyle={"none"}
-        variant='outline'
-        zIndex={2}
-        onClick={()=> Slide("right")}>
-        <BiRightArrowAlt />
-      </IconButton>
-    </Center> */}
 
       {/* </Flex> */}
     </>

@@ -6,8 +6,10 @@ import PageAddProducts from "../pages/pageaddproduct";
 import ChartComponent from "../components/chart";
 import PageRegister from "../components/register_cashier";
 import PageEdit from "../pages/pageeditproduct";
+import PageEditProduct from "../components/edit_product_per_unit";
 import PageTransaction from "../pages/pagetransaction";
 import ProtectedPage from "./protected";
+import PageCoba from "../components/page";
 
 const routes = [
   {
@@ -55,8 +57,16 @@ const routes = [
     element: <PageRegister />,
   },
   {
+    path: "/products/:id",
+    element: <PageEditProduct />,
+  },
+  {
     path: "/edit-product",
     element: <PageEdit />,
+  },
+  {
+    path: "/page",
+    element: <PageCoba />,
   },
   {
     path: "/transaction",

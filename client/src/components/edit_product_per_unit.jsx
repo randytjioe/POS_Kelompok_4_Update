@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../config/config";
+import { useLocation } from "react-router-dom";
 import {
   Button,
   Flex,
@@ -9,6 +10,7 @@ import {
   Heading,
   Input,
   Stack,
+  Link,
   Select,
   useColorModeValue,
   Avatar,
@@ -19,10 +21,12 @@ import {
   InputLeftElement,
   Radio,
   RadioGroup,
+  Textarea,
+  Image,
 } from "@chakra-ui/react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
-
-export default function AddProduct() {
+import { Link as ReachLink } from "react-router-dom";
+export default function EditProducts() {
   const [image, setImage] = useState("https://fakeimg.pl/300/");
   const [saveImage, setSaveImage] = useState(null);
   const [brand_id, setBrand_id] = useState(0);
@@ -30,8 +34,36 @@ export default function AddProduct() {
   const [harga, setHarga] = useState();
   const [stock, setStock] = useState();
   const [gender, setGender] = useState("");
-
+  const [products, setProducts] = useState([]);
   const [brands, setBrands] = useState([]);
+  const location = useLocation();
+  const [product_id, setProduct_id] = useState(0);
+  useEffect(() => {
+    setProduct_id(location.pathname?.split("/")[2]);
+    fetchproducts(location.pathname?.split("/")[2]);
+  }, []);
+
+  const fetchproducts = async (product_id) => {
+    await axiosInstance
+      .get("/products/" + product_id)
+      .then((response) => {
+        setProducts(response.data.result);
+        console.log(response.data.result);
+        setName(response.data.result.name);
+        setHarga(response.data.result.harga);
+        setStock(response.data.result.stock);
+        setImage(response.data.result.image_url);
+        setGender(response.data.result.gender);
+        setBrand_id(response.data.result.brand_id);
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+  };
+
+  useEffect(() => {
+    console.log(image);
+  }, [image]);
 
   const fetchBrand = () => {
     axiosInstance
@@ -43,35 +75,35 @@ export default function AddProduct() {
         console.log({ error });
       });
   };
-
-  const handleFile = (event) => {
-    const uploaded = event.target.files[0];
-    console.log(uploaded);
-    setImage(URL.createObjectURL(uploaded));
-    setSaveImage(uploaded);
-  };
-
   // const [image_url, setImage_url] = useState("");
 
   const navigate = useNavigate();
 
   const saveProduct = async (e) => {
     e.preventDefault();
+    // alert("asd");
 
-    const formData = new FormData();
+    // const formData = new FormData();
 
-    formData.append("name", name);
-    formData.append("stock", stock);
-    formData.append("harga", harga);
-    formData.append("image", saveImage);
-    formData.append("brand_id", brand_id);
-    formData.append("gender", gender);
+    // formData.append("name", name);
+    // formData.append("stock", stock);
+    // formData.append("harga", harga);
+    // formData.append("brand_id", brand_id);
+    // formData.append("gender", gender);
+    const Data = {
+      name,
+      stock,
+      harga,
+      brand_id,
+      gender,
+    };
 
     try {
       // alert("asd");
-      await axiosInstance.post("/product/v2", formData);
-      navigate("/products");
-      console.log("product added");
+      console.log(Data);
+      await axiosInstance.patch("/edit-product?id=" + product_id, Data);
+      navigate("/edit-product");
+      console.log("product edited");
     } catch (error) {
       console.error(error);
     }
@@ -103,28 +135,33 @@ export default function AddProduct() {
           lineHeight={1.1}
           fontSize={{ base: "2xl", sm: "3xl" }}
         >
-          ADD PRODUCT
+          EDIT PRODUCT
         </Heading>
-        <form onSubmit={(e) => saveProduct(e)}>
+        <form>
           <FormControl id="productName">
             <FormLabel>Product Image</FormLabel>
-            <Stack direction={["column", "row"]} spacing={6}>
-              <Center>
-                <Avatar size="xl" src={image}>
-                  <AvatarBadge
-                    as={IconButton}
-                    size="sm"
-                    rounded="full"
-                    top="-10px"
-                    colorScheme="red"
-                    aria-label="remove Image"
-                    icon={<SmallCloseIcon />}
-                  />
-                </Avatar>
-              </Center>
-              <Center w="full">
-                <Input
-                id=""
+            <Stack
+              direction={["column", "row"]}
+              spacing={6}
+              justifyContent="center"
+              alignItems="center"
+            >
+              {/* <Center> */}
+              <Image borderRadius={"100%"} boxSize="200px" src={image}>
+                {/* <AvatarBadge
+                  as={IconButton}
+                  size="sm"
+                  rounded="full"
+                  top="-10px"
+                  colorScheme="red"
+                  aria-label="remove Image"
+                  icon={<SmallCloseIcon />}
+                /> */}
+              </Image>
+              {/* </Center> */}
+              {/* <Center w="full"> */}
+              {/* <Input
+                  id=""
                   type="file"
                   accept="image/*"
                   onChange={handleFile}
@@ -132,8 +169,8 @@ export default function AddProduct() {
                   placeholder="Image URL"
                   name={image}
                   // onChange={(e) => setImage_url(e.target.value)}
-                ></Input>
-              </Center>
+                ></Input> */}
+              {/* </Center> */}
             </Stack>
           </FormControl>
           <FormControl id="Brand">
@@ -154,7 +191,7 @@ export default function AddProduct() {
           </FormControl>
           <FormControl id="productName">
             <FormLabel>Product Name</FormLabel>
-            <Input
+            <Textarea
               placeholder="Product Name"
               _placeholder={{ color: "gray.500" }}
               type="text"
@@ -204,7 +241,7 @@ export default function AddProduct() {
               </Stack>
             </RadioGroup>
           </FormControl>
-          <Stack spacing={6} direction={["column", "row"]}>
+          <Stack spacing={6} direction={["column", "row"]} py={4}>
             <Button
               bg={"red.400"}
               color={"white"}
@@ -213,10 +250,11 @@ export default function AddProduct() {
                 bg: "red.500",
               }}
               type="reset"
-              value="Reset"
+              onClick={() => navigate("/edit-product")}
             >
               Cancel
             </Button>
+
             <Button
               bg={"blue.400"}
               color={"white"}
@@ -225,8 +263,9 @@ export default function AddProduct() {
                 bg: "blue.500",
               }}
               type="submit"
+              onClick={(e) => saveProduct(e)}
             >
-              Add
+              Save
             </Button>
           </Stack>
         </form>

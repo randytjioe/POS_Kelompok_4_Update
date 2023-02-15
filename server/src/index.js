@@ -145,8 +145,11 @@ app.get("/transaction-item", (req, res) => {
 });
 
 app.get("/product-all", (req, res) => {
+  const offset = req.query.page ? req.query.page : 0;
+  console.log(offset);
   const qString =
-    "Select p.id, p.name, p.stock,p.harga,p.image_url,b.name as category, p.gender, p.stock_update from products p join brands b on p.brand_id=b.id where stock > 0";
+    "Select p.id, p.name, p.stock,p.harga,p.image_url,b.name as category, p.gender, p.stock_update from products p join brands b on p.brand_id=b.id where stock > 0 limit 6 offset " +
+    offset;
   db.query(qString, (err, result) => {
     if (err) {
       res.status(400).json({
@@ -156,6 +159,38 @@ app.get("/product-all", (req, res) => {
     res.status(200).json({
       message: "data fetched",
       result: result,
+    });
+  });
+});
+app.get("/product-all-edit", (req, res) => {
+  const qString =
+    "Select p.id, p.name, p.stock,p.harga,p.image_url,b.name as category, p.gender, p.stock_update from products p join brands b on p.brand_id=b.id";
+  db.query(qString, (err, result) => {
+    if (err) {
+      res.status(400).json({
+        message: "query error",
+      });
+    }
+    res.status(200).json({
+      message: "data fetched",
+      result: result,
+    });
+  });
+});
+app.get("/products/:id", (req, res) => {
+  console.log(req.params);
+  const qString =
+    "Select p.id, p.name,p.brand_id, p.stock,p.harga,p.image_url,b.name as category, p.gender, p.stock_update from products p join brands b on p.brand_id=b.id where p.id =" +
+    req.params.id;
+  db.query(qString, (err, result) => {
+    if (err) {
+      res.status(400).json({
+        message: "query error",
+      });
+    }
+    res.status(200).json({
+      message: "data fetched",
+      result: result[0],
     });
   });
 });
@@ -167,13 +202,51 @@ app.get("/category", (req, res) => {
         message: "query error",
       });
     }
+    +res.status(200).json({
+      message: "data fetched",
+      result: result,
+    });
+  });
+});
+
+app.patch("/edit-product", (req, res) => {
+  console.log(req.query.id);
+  console.log(req.body);
+  const qString = `update products set name ="${req.body.name}"  ,harga=${req.body.harga},stock=${req.body.stock},brand_id=${req.body.brand_id}, gender="${req.body.gender}" where id=${req.query.id}`;
+  db.query(qString, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(400).json({
+        message: "query error",
+      });
+    }
     res.status(200).json({
       message: "data fetched",
       result: result,
     });
   });
 });
-app.get("/filter", (req, res) => {
+
+app.delete("/delete-product", (req, res) => {
+  console.log(req.query.id);
+  console.log(req.body);
+  const qString = `delete from products where id=${req.query.id}`;
+  db.query(qString, (err, result) => {
+    if (err) {
+      console.log("asd");
+
+      return res.status(400).json({
+        message: "query error",
+      });
+    }
+    res.status(200).json({
+      message: "data fetched",
+      result: result,
+    });
+  });
+});
+
+app.get("/filter-edit", (req, res) => {
   console.log(req.query);
   const { order } = req.query;
   delete req.query.order;
@@ -235,7 +308,7 @@ app.get("/filter", (req, res) => {
   qString =
     "Select * from (Select p.name, p.stock,p.harga,p.image_url,b.name as category, p.gender, p.stock_update from products p join brands b on p.brand_id=b.id) as n " +
     where +
-    "and stock > 0 order by name " +
+    " order by name " +
     order;
 
   db.query(qString, (err, result) => {
@@ -252,7 +325,85 @@ app.get("/filter", (req, res) => {
     });
   });
 });
+app.get("/filter", (req, res) => {
+  console.log(req.query);
+  const { order } = req.query;
+  delete req.query.order;
+  const arrQuery = Object.entries(req.query);
 
+  let gender = arrQuery.filter((val) => {
+    return val[0] === "men" || val[0] === "women" || val[0] === "unisex";
+  });
+
+  console.log(gender);
+
+  const categories = arrQuery.filter((val) => {
+    return val[0] !== "men" && val[0] !== "women" && val[0] !== "unisex";
+  });
+
+  console.log(categories);
+
+  let where = " WHERE  stock > 0 ";
+
+  /// start
+  if (gender.length || categories.length) {
+    where = " and (";
+
+    if (gender.length) {
+      gender = gender.filter((val) => {
+        return val != undefined;
+      });
+
+      gender.map((val, idx) => {
+        if (idx) {
+          if (val) {
+            where += `or n.gender = '${val[0]}' `;
+          }
+        } else {
+          if (val) {
+            where += ` n.gender = '${val[0]}' `;
+          }
+        }
+      });
+    }
+
+    if (categories.length) {
+      if (gender.length) {
+        where += ") and (";
+      }
+      console.log(categories);
+      categories.map((val, idx) => {
+        idx
+          ? (where += `or n.category = '${val[0]}' `)
+          : (where += ` n.category = '${val[0]}' `);
+      });
+    }
+
+    where += ")";
+  }
+
+  ///end
+
+  qString =
+    "Select * from (Select p.name, p.stock,p.harga,p.image_url,b.name as category, p.gender, p.stock_update from products p join brands b on p.brand_id=b.id) as n " +
+    where +
+    "order by name " +
+    order;
+
+  db.query(qString, (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        message: "query error",
+      });
+    }
+
+    res.status(200).json({
+      message: "data fetched",
+      result: result,
+    });
+  });
+});
 app.get("/find", (req, res) => {
   console.log(req.query);
   let qString = "Select * from products ";

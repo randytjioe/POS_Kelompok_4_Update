@@ -19,7 +19,18 @@ export default function PageEdit() {
   const [categories1, setCategories1] = useState([]);
 
   const [gender, setGender] = useState([]);
-
+  async function DeleteData(id) {
+    await axiosInstance
+      .delete("/delete-product?id=" + id)
+      .then(() => {
+        alert("Produk berhasil dihapus");
+        fetchData();
+      })
+      .catch((err) => {
+        alert("Produk tidak bisa dihapus");
+        console.log(err.message);
+      });
+  }
   const fetchFilPro = async () => {
     let url = "";
     categories1.map((val, idx) => {
@@ -34,7 +45,7 @@ export default function PageEdit() {
 
     console.log(url);
 
-    await axiosInstance.get("/filter?" + url).then((res) => {
+    await axiosInstance.get("/filter-edit?" + url).then((res) => {
       setData(res.data.result);
     });
   };
@@ -69,7 +80,7 @@ export default function PageEdit() {
   }, []);
 
   async function fetchData(categories1, gender) {
-    await axiosInstance.get("/product-all").then((res) => {
+    await axiosInstance.get("/product-all-edit").then((res) => {
       setData(res.data.result);
     });
   }
@@ -80,7 +91,7 @@ export default function PageEdit() {
   }
   return (
     <>
-      <NavBar />
+      <NavBar filter={fetchFinPro} />
       <Flex flexDir={"row"} pos="fixed" top="70" left={"0"}>
         <SideBar />
         <SidebarProduct
@@ -94,7 +105,7 @@ export default function PageEdit() {
           data={datacat}
         />
       </Flex>
-      <EditProduct data={data} id="edit" />
+      <EditProduct data={data} delete={DeleteData} id="edit" />
     </>
   );
 }

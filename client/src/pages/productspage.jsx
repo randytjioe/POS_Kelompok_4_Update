@@ -18,6 +18,7 @@ export default function PageProducts() {
   const [categories1, setCategories1] = useState([]);
 
   const [gender, setGender] = useState([]);
+  const [page, setPage] = useState(0);
 
   const fetchFilPro = async () => {
     let url = "";
@@ -67,10 +68,20 @@ export default function PageProducts() {
     }, 500);
   }, []);
 
-  async function fetchData(categories1, gender) {
-    await axiosInstance.get("/product-all").then((res) => {
-      setData(res.data.result);
-    });
+  async function fetchData(limit) {
+    if (limit < 0) {
+      limit = 0;
+    }
+
+    await axiosInstance
+      .get("/product-all", {
+        params: {
+          page: limit,
+        },
+      })
+      .then((res) => {
+        setData(res.data.result);
+      });
   }
   async function fetchDataCat(categories1, gender) {
     await axiosInstance.get("/category").then((res) => {
@@ -101,7 +112,13 @@ export default function PageProducts() {
             />
           </Flex>
           <Center marginLeft={"450px"}>
-            <Products data={data} id="men" />
+            <Products
+              page={page}
+              setPage={setPage}
+              fetchData={fetchData}
+              data={data}
+              id="men"
+            />
           </Center>
         </>
       )}

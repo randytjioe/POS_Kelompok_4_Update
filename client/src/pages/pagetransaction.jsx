@@ -36,6 +36,18 @@ export default function PageTransaction() {
     });
   };
 
+  const fetchFinPro = async (search) => {
+    let url = "";
+
+    url += `name=${search}`;
+
+    console.log(url);
+
+    await axiosInstance.get("/find?" + url).then((res) => {
+      setData(res.data.result);
+    });
+  };
+
   const fetchFinDatePro = async (datefrom, dateend) => {
     let url = "";
     const df = moment(datefrom).format("YYYY-MM-DD");
@@ -62,7 +74,7 @@ export default function PageTransaction() {
   }
   return (
     <>
-      <NavBar />
+      <NavBar filter={fetchFinPro} />
       <Flex flexDir={"row"} pos="fixed" top="70" left={"0"}>
         <SideBar />
       </Flex>
