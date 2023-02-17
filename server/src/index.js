@@ -95,7 +95,7 @@ app.get("/transaction", (req, res) => {
 });
 app.get("/transaction-chart", (req, res) => {
   const qString =
-    "Select DATE_FORMAT(tgl, '%d/%m/%Y') as tgl,no_trans,total from trans_headers where DATE_FORMAT(tgl, '%d/%m/%Y')";
+    "Select DATE_FORMAT(tgl, '%d/%m/%Y') as tgl,no_trans,total from trans_headers where DATE_FORMAT(tgl, '%d/%m/%Y') GROUP BY tgl ORDER BY tgl ASC";
 
   db.query(qString, (err, result) => {
     if (err) {
@@ -129,7 +129,7 @@ app.get("/transaction-bar", (req, res) => {
 
 app.get("/transaction-item", (req, res) => {
   const qString =
-    "Select i.qty,i.harga,p.name from trans_items i join products p on i.product_id=p.id;";
+    "Select i.qty,i.harga,p.name from trans_items i join products p on i.product_id=p.id order by i.qty desc;";
 
   db.query(qString, (err, result) => {
     if (err) {
@@ -178,7 +178,7 @@ app.get("/product-all-edit", (req, res) => {
   });
 });
 app.get("/products/:id", (req, res) => {
-  console.log(req.params);
+  // console.log(req.params);
   const qString =
     "Select p.id, p.name,p.brand_id, p.stock,p.harga,p.image_url,b.name as category, p.gender, p.stock_update from products p join brands b on p.brand_id=b.id where p.id =" +
     req.params.id;
@@ -210,8 +210,8 @@ app.get("/category", (req, res) => {
 });
 
 app.patch("/edit-product", (req, res) => {
-  console.log(req.query.id);
-  console.log(req.body);
+  // console.log(req.query.id);
+  // console.log(req.body);
   const qString = `update products set name ="${req.body.name}"  ,harga=${req.body.harga},stock=${req.body.stock},brand_id=${req.body.brand_id}, gender="${req.body.gender}" where id=${req.query.id}`;
   db.query(qString, (err, result) => {
     if (err) {
@@ -228,13 +228,11 @@ app.patch("/edit-product", (req, res) => {
 });
 
 app.delete("/delete-product", (req, res) => {
-  console.log(req.query.id);
-  console.log(req.body);
+  // console.log(req.query.id);
+  // console.log(req.body);
   const qString = `delete from products where id=${req.query.id}`;
   db.query(qString, (err, result) => {
     if (err) {
-      console.log("asd");
-
       return res.status(400).json({
         message: "query error",
       });
@@ -247,7 +245,7 @@ app.delete("/delete-product", (req, res) => {
 });
 
 app.get("/filter-edit", (req, res) => {
-  console.log(req.query);
+  // console.log(req.query);
   const { order } = req.query;
   delete req.query.order;
   const arrQuery = Object.entries(req.query);
@@ -256,13 +254,13 @@ app.get("/filter-edit", (req, res) => {
     return val[0] === "men" || val[0] === "women" || val[0] === "unisex";
   });
 
-  console.log(gender);
+  // console.log(gender);
 
   const categories = arrQuery.filter((val) => {
     return val[0] !== "men" && val[0] !== "women" && val[0] !== "unisex";
   });
 
-  console.log(categories);
+  // console.log(categories);
 
   let where = "";
 
@@ -292,7 +290,7 @@ app.get("/filter-edit", (req, res) => {
       if (gender.length) {
         where += ") and (";
       }
-      console.log(categories);
+      // console.log(categories);
       categories.map((val, idx) => {
         idx
           ? (where += `or n.category = '${val[0]}' `)

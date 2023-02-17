@@ -37,7 +37,7 @@ export default function Register() {
 
   return (
     <>
-      <Flex onClick={onOpen}>SIGN UP</Flex>
+      <Flex onClick={onOpen}>SIGN UP CASHIER</Flex>
 
       <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
         <Formik
@@ -130,7 +130,7 @@ export default function Register() {
                   colorScheme="blue"
                   mr={3}
                   type="submit"
-                  onSubmit={touched}
+                  onSubmit={handleSubmit}
                 >
                   Submit
                 </Button>

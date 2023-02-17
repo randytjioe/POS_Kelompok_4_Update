@@ -9,7 +9,6 @@ import PageEdit from "../pages/pageeditproduct";
 import PageEditProduct from "../components/edit_product_per_unit";
 import PageTransaction from "../pages/pagetransaction";
 import ProtectedPage from "./protected";
-import PageCoba from "../components/page";
 
 const routes = [
   {
@@ -42,11 +41,19 @@ const routes = [
   },
   {
     path: "/products",
-    element: <PageProduct />,
+    element: (
+      <ProtectedPage needLogin={true}>
+        <PageProduct />
+      </ProtectedPage>
+    ),
   },
   {
     path: "/add-product",
-    element: <PageAddProducts />,
+    element: (
+      <ProtectedPage needLogin={true}>
+        <PageAddProducts />
+      </ProtectedPage>
+    ),
   },
   {
     path: "/chart",
@@ -54,23 +61,36 @@ const routes = [
   },
   {
     path: "/register",
-    element: <PageRegister />,
+    element: (
+      <ProtectedPage needLogin={true}>
+        <PageRegister />
+      </ProtectedPage>
+    ),
   },
   {
     path: "/products/:id",
-    element: <PageEditProduct />,
+    element: (
+      <ProtectedPage needLogin={true}>
+        <PageEditProduct />
+      </ProtectedPage>
+    ),
   },
   {
     path: "/edit-product",
-    element: <PageEdit />,
+    element: (
+      <ProtectedPage needLogin={true}>
+        <PageEdit />
+      </ProtectedPage>
+    ),
   },
-  {
-    path: "/page",
-    element: <PageCoba />,
-  },
+
   {
     path: "/transaction",
-    element: <PageTransaction />,
+    element: (
+      <ProtectedPage needLogin={true}>
+        <PageTransaction />
+      </ProtectedPage>
+    ),
   },
 ];
 

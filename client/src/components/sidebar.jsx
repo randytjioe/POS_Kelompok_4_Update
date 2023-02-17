@@ -105,7 +105,7 @@ export default function Sidebar() {
             >
               <Icon as={FiHome} color="black" mx={2} />
               <Link
-                to="/"
+                to="/adminpage"
                 mx={3}
                 as={ReachLink}
                 fontSize="20px"

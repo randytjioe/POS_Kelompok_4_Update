@@ -190,7 +190,7 @@ export default function Transaction(props) {
                               <Tr>
                                 <Td>{product?.name}</Td>
                                 <Td>{product?.qty}</Td>
-                                <Td> {product?.harga}</Td>
+                                <Td> Rp.{product?.harga.toLocaleString()}</Td>
                               </Tr>
                             </>
                           );

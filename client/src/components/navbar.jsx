@@ -207,8 +207,6 @@ export default function Navbar(props) {
                       <Register />
                     </Link>{" "}
                   </ListItem>
-                  <Divider orientation="horizontal" py={2} />
-                  <ListItem> Profile</ListItem>
 
                   <Divider orientation="horizontal" py={2} />
                   <ListItem>
