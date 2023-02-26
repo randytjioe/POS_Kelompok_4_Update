@@ -26,7 +26,7 @@ import {
   Avatar,
   Center,
 } from "@chakra-ui/react";
-import Register from "./register_cashier";
+import Register from "./register2";
 import Avatar1 from "../assets/avatar.png";
 import Logo from "../assets/logo.png";
 import { AiOutlineSearch, AiOutlinePlus } from "react-icons/ai";
